@@ -1,0 +1,10 @@
+# PlatformIO build output and caches
+.pio/
+
+# VS Code: keep the shared extension list, ignore personal settings
+.vscode/*
+!.vscode/extensions.json
+
+# OS clutter
+.DS_Store
+Thumbs.db

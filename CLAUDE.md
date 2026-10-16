@@ -11,7 +11,7 @@ Read this first. It carries over everything decided in the original planning cha
 
 ## How David wants to work
 
-- **Don't write code until David asks.** As of Oct 16 he's set up the project and hardware plan but hasn't asked for code yet.
+- **Ask before writing game code.** On Oct 16 David asked for the PlatformIO project skeleton only: `platformio.ini`, `include/Pins.h` and a setup-test `src/main.cpp`. No game logic exists yet. Build module by module, only when asked.
 - Natural, conversational tone. Contractions, short sentences. No em-dashes, no AI-sounding phrasing.
 - Targeted edits, not full rewrites.
 - Be honest and critical. Don't mince words or invent facts. If something from a photo or memory is unconfirmed, say so.
@@ -124,6 +124,13 @@ One hidden imposter. Ball passed around for voting on the imposter's color. Vote
 | Lights | LED strip patterns: glow, drain, flash, strobe |
 | Haptics | Vibration patterns: tick, buzz, long |
 | Settings | Save settings and calibration to flash |
+
+**Project setup (done Oct 16):**
+- `platformio.ini`: env `ball`, `espressif32@7.1.3`, board `esp32dev`, Arduino framework, monitor at 115200. Libraries pinned: FastLED ^3.10.7, ESP32Encoder ^0.12.0, LiquidCrystal_I2C from GitHub tag 1.1.3. Accelerometer, timer display and DFPlayer libraries are listed as comments until the parts are confirmed.
+- `include/Pins.h`: all GPIO assignments in `namespace Pins`. **Provisional**: check against the real board before wiring. Avoids strapping pins (0, 2, 12, 15) except the onboard LED on 2, and flash pins (6 to 11).
+- `src/main.cpp`: setup test only (blink + serial heartbeat).
+- **Not yet compiled.** The setup session's sandbox couldn't reach the PlatformIO registry. The first real build happens on David's laptop. If it fails, check library versions and the platform version first.
+- Code style (proposed, not yet confirmed by David): Unreal-like naming (PascalCase for types, constants and locals) since that's what he writes daily. Arduino's own functions stay as they are.
 
 **State machine:** Idle, Setup, Tagging (not in Solo), Puzzle, Pass select, Exploded, Defused (Solo only), Results. Countdown runs during Tagging, Puzzle and Pass select.
 
