@@ -130,7 +130,8 @@ One hidden imposter. Ball passed around for voting on the imposter's color. Vote
 - `include/Pins.h`: all GPIO assignments in `namespace Pins`. **Provisional**: check against the real board before wiring. Avoids strapping pins (0, 2, 12, 15) except the onboard LED on 2, and flash pins (6 to 11).
 - `src/main.cpp`: setup test only (blink + serial heartbeat).
 - **Build status (Oct 16):** builds, uploads and runs on David's PC. The setup test's blue LED blinks. FastLED 3.10.7 had failed to compile (looser throw specifier errors), fixed by pinning 3.7.8. Claude's sandbox can't reach the PlatformIO registry, so builds are only verified on David's PC.
-- **David's board:** CP2102 USB chip (Silicon Labs driver installed), shows up as COM5. His PC also has Bluetooth serial ports on COM3 and COM4, which can confuse auto-detect. Never commit `upload_port` or `monitor_port` to `platformio.ini`; they differ per machine.
+- **David's board:** 30-pin ESP32 DevKit, DOIT DevKit V1 layout, ESP32-WROOM-32 module, CP2102 USB chip (Silicon Labs driver installed), shows up as COM5. Labels: GPIO16 = RX2, GPIO17 = TX2, others printed as D2, D4 and so on. Every pin in `Pins.h` exists on it. Red LED = power; blue LED on GPIO2 sits beside it.
+- **Arduino IDE works too:** board "ESP32 Dev Module", ESP32 core 2.0.17 (matches PlatformIO). Serial Monitor must be set to 115200. A button test on GPIO16 (RX2) printed correctly on Oct 16. His PC also has Bluetooth serial ports on COM3 and COM4, which can confuse auto-detect. Never commit `upload_port` or `monitor_port` to `platformio.ini`; they differ per machine.
 - Code style (proposed, not yet confirmed by David): Unreal-like naming (PascalCase for types, constants and locals) since that's what he writes daily. Arduino's own functions stay as they are.
 
 **State machine:** Idle, Setup, Tagging (not in Solo), Puzzle, Pass select, Exploded, Defused (Solo only), Results. Countdown runs during Tagging, Puzzle and Pass select.
