@@ -126,10 +126,10 @@ One hidden imposter. Ball passed around for voting on the imposter's color. Vote
 | Settings | Save settings and calibration to flash |
 
 **Project setup (done Oct 16):**
-- `platformio.ini`: env `ball`, `espressif32@7.1.3`, board `esp32dev`, Arduino framework, monitor at 115200. Libraries pinned: FastLED ^3.10.7, ESP32Encoder ^0.12.0, LiquidCrystal_I2C from GitHub tag 1.1.3. Accelerometer, timer display and DFPlayer libraries are listed as comments until the parts are confirmed.
+- `platformio.ini`: env `ball`, `espressif32@7.1.3`, board `esp32dev`, Arduino framework, monitor at 115200. Platform ships Arduino core 2.0.17 and GCC 8.4. Libraries pinned exactly: FastLED 3.7.8 (3.10+ fails to compile on GCC 8.4, confirmed on David's first build), ESP32Encoder 0.12.0, LiquidCrystal_I2C from GitHub tag 1.1.3. Accelerometer, timer display and DFPlayer libraries are listed as comments until the parts are confirmed.
 - `include/Pins.h`: all GPIO assignments in `namespace Pins`. **Provisional**: check against the real board before wiring. Avoids strapping pins (0, 2, 12, 15) except the onboard LED on 2, and flash pins (6 to 11).
 - `src/main.cpp`: setup test only (blink + serial heartbeat).
-- **Not yet compiled.** The setup session's sandbox couldn't reach the PlatformIO registry. The first real build happens on David's laptop. If it fails, check library versions and the platform version first.
+- **Build status:** first build on David's PC failed inside FastLED 3.10.7 (looser throw specifier errors in its SD file code). Pinned to 3.7.8. Claude's sandbox can't reach the PlatformIO registry, so builds are only verified on David's PC.
 - Code style (proposed, not yet confirmed by David): Unreal-like naming (PascalCase for types, constants and locals) since that's what he writes daily. Arduino's own functions stay as they are.
 
 **State machine:** Idle, Setup, Tagging (not in Solo), Puzzle, Pass select, Exploded, Defused (Solo only), Results. Countdown runs during Tagging, Puzzle and Pass select.
