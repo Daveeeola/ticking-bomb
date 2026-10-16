@@ -1,0 +1,285 @@
+<title>Ticking Bomb Bench Wiring</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: one bench sheet. Title, schematic, then the connection table and checks, single column. */
+:root {
+  --bg: #f4f6f3;
+  --panel: #ffffff;
+  --fg: #19221d;
+  --muted: #5b6a61;
+  --line: #d3dbd5;
+  --pcb: #18211c;
+  --pcb-ink: #c9d4cc;
+  --pcb-on: #ffd166;
+  --w5v: #d1342b;
+  --wgnd: #2a63c7;
+  --wsda: #c9850a;
+  --wscl: #16936e;
+  --wsig: #8a45c9;
+  --lcd: #1f7a3d;
+  --glass: #2a3fb0;
+  --glass-ink: #dfe7ff;
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --panel: #19201c; --fg: #e3ebe5; --muted: #95a59b; --line: #2d3832;
+    --pcb: #0a0e0c; --pcb-ink: #b9c6bd; --pcb-on: #ffd166;
+    --w5v: #ff6b5e; --wgnd: #6c9cff; --wsda: #f2b02e; --wscl: #3cc79a; --wsig: #b98af0;
+    --lcd: #1c6a36; --glass: #2b3fae; --glass-ink: #e4ebff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --panel: #19201c; --fg: #e3ebe5; --muted: #95a59b; --line: #2d3832;
+  --pcb: #0a0e0c; --pcb-ink: #b9c6bd; --pcb-on: #ffd166;
+  --w5v: #ff6b5e; --wgnd: #6c9cff; --wsda: #f2b02e; --wscl: #3cc79a; --wsig: #b98af0;
+  --lcd: #1c6a36; --glass: #2b3fae; --glass-ink: #e4ebff;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-ui); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+main { max-width: 1000px; margin: 0 auto; display: grid; gap: 28px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); line-height: 1.15; text-wrap: balance; font-weight: 700; }
+h2 { margin: 0 0 10px; font-size: 18px; text-wrap: balance; }
+.lede { margin: 0; max-width: 65ch; color: var(--muted); }
+.sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.scroll { overflow-x: auto; }
+svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+
+/* SVG styling */
+.thick { stroke-width: 5; }
+.w-5v, .w-gnd, .w-sda, .w-scl, .w-sig, .w-ink { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.w-5v { stroke: var(--w5v); } .w-gnd { stroke: var(--wgnd); } .w-sda { stroke: var(--wsda); }
+.w-scl { stroke: var(--wscl); } .w-sig { stroke: var(--wsig); } .w-ink { stroke: var(--fg); }
+.rail .thick { stroke-width: 5; }
+.dot-5v { fill: var(--w5v); } .dot-gnd { fill: var(--wgnd); }
+.node { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.pcb { fill: var(--pcb); }
+.usb { fill: var(--muted); }
+.pin { fill: var(--pcb); stroke: var(--pcb-ink); stroke-width: 1.4; }
+.pin.used { fill: var(--pcb-on); stroke: var(--pcb-on); }
+.pinlbl { font-family: var(--font-mono); font-size: 10.5px; fill: var(--pcb-ink); }
+.pinlbl.on { fill: var(--pcb-on); font-weight: 600; }
+.pinlbl.dark { fill: #ffffff; font-weight: 600; }
+.pcb-title { font-family: var(--font-ui); font-size: 15px; font-weight: 600; fill: #ffffff; }
+.pcb-sub { font-family: var(--font-ui); font-size: 11.5px; fill: var(--pcb-ink); }
+.lbl { font-family: var(--font-mono); font-size: 12px; fill: var(--fg); }
+.lbl.strong { font-family: var(--font-ui); font-weight: 600; font-size: 13px; }
+.lbl-5v { fill: var(--w5v); font-weight: 600; } .lbl-gnd { fill: var(--wgnd); font-weight: 600; }
+.lbl-sda { fill: var(--wsda); font-weight: 600; } .lbl-scl { fill: var(--wscl); font-weight: 600; }
+.tiny { font-family: var(--font-ui); font-size: 11px; fill: var(--muted); }
+.led { fill: var(--wsig); fill-opacity: .25; stroke: var(--wsig); stroke-width: 2; }
+.rays { fill: none; stroke: var(--wsig); stroke-width: 1.4; stroke-linecap: round; }
+.lcd { fill: var(--lcd); }
+.lcd-glass { fill: var(--glass); }
+.lcd-text { font-family: var(--font-mono); font-size: 20px; fill: var(--glass-ink); letter-spacing: .06em; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+td code, li code { font-family: var(--font-mono); font-size: 13px; }
+.chip { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cols > * { min-width: 0; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.warn { border-left: 3px solid var(--w5v); padding-left: 12px; }
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">Bench test · LCD, button, LED</span>
+    <h1>Ticking Bomb Bench Wiring</h1>
+    <p class="lede">How the 30-pin ESP32, the 16x2 LCD, one button and one LED connect on the breadboard. Pin names match the labels printed on your board.</p>
+  </header>
+
+  <section class="sheet" aria-label="Schematic">
+    <div class="scroll">
+<svg viewBox="0 0 960 640" role="img" aria-labelledby="dt dd" xmlns="http://www.w3.org/2000/svg">
+<title id="dt">Wiring for the LCD, button and LED test</title>
+<desc id="dd">ESP32 VIN to the 5V rail and GND to the ground rail. LCD VCC to 5V, GND to ground, SDA to D21, SCL to D22. Button between RX2 (GPIO16) and ground. D33 through a 330 ohm resistor to the LED, LED to ground.</desc>
+<g class="rail">
+<line x1="40" y1="100" x2="920" y2="100" class="w-5v thick"/>
+<line x1="40" y1="130" x2="920" y2="130" class="w-gnd thick"/>
+<text x="40" y="90" class="lbl lbl-5v">+ rail · 5V (from VIN)</text>
+<text x="40" y="150" class="lbl lbl-gnd">− rail · GND</text>
+</g>
+<rect x="222" y="250" width="504" height="130" rx="10" class="pcb"/>
+<rect x="196" y="295" width="30" height="40" rx="4" class="usb"/>
+<text x="211" y="352" class="tiny" text-anchor="middle">USB</text>
+<text x="474" y="312" class="pcb-title" text-anchor="middle">ESP32 DevKit · 30-pin</text>
+<text x="474" y="328" class="pcb-sub" text-anchor="middle">labels as printed on your board</text>
+<circle cx="250" cy="262" r="5" class="pin used"/>
+<text x="250" y="284" class="pinlbl on" text-anchor="middle">VIN</text>
+<circle cx="282" cy="262" r="5" class="pin used"/>
+<text x="282" y="284" class="pinlbl on" text-anchor="middle">GND</text>
+<circle cx="314" cy="262" r="5" class="pin"/>
+<text x="314" y="284" class="pinlbl" text-anchor="middle">D13</text>
+<circle cx="346" cy="262" r="5" class="pin"/>
+<text x="346" y="284" class="pinlbl" text-anchor="middle">D12</text>
+<circle cx="378" cy="262" r="5" class="pin"/>
+<text x="378" y="284" class="pinlbl" text-anchor="middle">D14</text>
+<circle cx="410" cy="262" r="5" class="pin"/>
+<text x="410" y="284" class="pinlbl" text-anchor="middle">D27</text>
+<circle cx="442" cy="262" r="5" class="pin"/>
+<text x="442" y="284" class="pinlbl" text-anchor="middle">D26</text>
+<circle cx="474" cy="262" r="5" class="pin"/>
+<text x="474" y="284" class="pinlbl" text-anchor="middle">D25</text>
+<circle cx="506" cy="262" r="5" class="pin used"/>
+<text x="506" y="284" class="pinlbl on" text-anchor="middle">D33</text>
+<circle cx="538" cy="262" r="5" class="pin"/>
+<text x="538" y="284" class="pinlbl" text-anchor="middle">D32</text>
+<circle cx="570" cy="262" r="5" class="pin"/>
+<text x="570" y="284" class="pinlbl" text-anchor="middle">D35</text>
+<circle cx="602" cy="262" r="5" class="pin"/>
+<text x="602" y="284" class="pinlbl" text-anchor="middle">D34</text>
+<circle cx="634" cy="262" r="5" class="pin"/>
+<text x="634" y="284" class="pinlbl" text-anchor="middle">VN</text>
+<circle cx="666" cy="262" r="5" class="pin"/>
+<text x="666" y="284" class="pinlbl" text-anchor="middle">VP</text>
+<circle cx="698" cy="262" r="5" class="pin"/>
+<text x="698" y="284" class="pinlbl" text-anchor="middle">EN</text>
+<circle cx="250" cy="368" r="5" class="pin"/>
+<text x="250" y="352" class="pinlbl" text-anchor="middle">3V3</text>
+<circle cx="282" cy="368" r="5" class="pin"/>
+<text x="282" y="352" class="pinlbl" text-anchor="middle">GND</text>
+<circle cx="314" cy="368" r="5" class="pin"/>
+<text x="314" y="352" class="pinlbl" text-anchor="middle">D15</text>
+<circle cx="346" cy="368" r="5" class="pin"/>
+<text x="346" y="352" class="pinlbl" text-anchor="middle">D2</text>
+<circle cx="378" cy="368" r="5" class="pin"/>
+<text x="378" y="352" class="pinlbl" text-anchor="middle">D4</text>
+<circle cx="410" cy="368" r="5" class="pin used"/>
+<text x="410" y="352" class="pinlbl on" text-anchor="middle">RX2</text>
+<circle cx="442" cy="368" r="5" class="pin"/>
+<text x="442" y="352" class="pinlbl" text-anchor="middle">TX2</text>
+<circle cx="474" cy="368" r="5" class="pin"/>
+<text x="474" y="352" class="pinlbl" text-anchor="middle">D5</text>
+<circle cx="506" cy="368" r="5" class="pin"/>
+<text x="506" y="352" class="pinlbl" text-anchor="middle">D18</text>
+<circle cx="538" cy="368" r="5" class="pin"/>
+<text x="538" y="352" class="pinlbl" text-anchor="middle">D19</text>
+<circle cx="570" cy="368" r="5" class="pin used"/>
+<text x="570" y="352" class="pinlbl on" text-anchor="middle">D21</text>
+<circle cx="602" cy="368" r="5" class="pin"/>
+<text x="602" y="352" class="pinlbl" text-anchor="middle">RX0</text>
+<circle cx="634" cy="368" r="5" class="pin"/>
+<text x="634" y="352" class="pinlbl" text-anchor="middle">TX0</text>
+<circle cx="666" cy="368" r="5" class="pin used"/>
+<text x="666" y="352" class="pinlbl on" text-anchor="middle">D22</text>
+<circle cx="698" cy="368" r="5" class="pin"/>
+<text x="698" y="352" class="pinlbl" text-anchor="middle">D23</text>
+<polyline points="250,257 250,100" class="w-5v"/>
+<circle cx="250" cy="100" r="4.5" class="dot-5v"/>
+<polyline points="282,257 282,130" class="w-gnd"/>
+<circle cx="282" cy="130" r="4.5" class="dot-gnd"/>
+<polyline points="506,257 506,200 540,200" class="w-sig"/>
+<polyline points="540,200 546,192 558,208 570,192 582,208 594,192 604,208 610,200" class="w-sig part"/>
+<text x="575" y="184" class="lbl" text-anchor="middle">330 Ω</text>
+<polyline points="610,200 640,200" class="w-sig"/>
+<polygon points="640,186 640,214 668,200" class="led"/>
+<line x1="670" y1="185" x2="670" y2="215" class="w-gnd part"/>
+<path d="M652,180 l10,-12 M662,168 l-5,1 M662,168 l-1,5 M662,184 l10,-12 M672,172 l-5,1 M672,172 l-1,5" class="rays"/>
+<text x="640" y="232" class="tiny" text-anchor="middle">long leg</text>
+<text x="684" y="232" class="tiny" text-anchor="start">short leg</text>
+<polyline points="670,200 760,200 760,130" class="w-gnd"/>
+<circle cx="760" cy="130" r="4.5" class="dot-gnd"/>
+<text x="498" y="226" class="lbl strong" text-anchor="end">LED on D33</text>
+<polyline points="410,373 410,440 330,440" class="w-sig"/>
+<circle cx="330" cy="440" r="3.5" class="node"/><circle cx="270" cy="440" r="3.5" class="node"/>
+<line x1="330" y1="426" x2="270" y2="426" class="w-ink part"/>
+<line x1="300" y1="426" x2="300" y2="414" class="w-ink part"/>
+<line x1="290" y1="414" x2="310" y2="414" class="w-ink part"/>
+<text x="300" y="466" class="lbl strong" text-anchor="middle">Button</text>
+<text x="300" y="482" class="tiny" text-anchor="middle">diagonal legs</text>
+<polyline points="270,440 160,440 160,130" class="w-gnd"/>
+<circle cx="160" cy="130" r="4.5" class="dot-gnd"/>
+<text x="418" y="414" class="tiny">GPIO16</text>
+<rect x="520" y="480" width="400" height="120" rx="8" class="lcd"/>
+<rect x="560" y="530" width="320" height="52" rx="3" class="lcd-glass"/>
+<text x="720" y="562" class="lcd-text" text-anchor="middle">Hello World!</text>
+<circle cx="570" cy="492" r="4" class="pin used"/>
+<text x="570" y="516" class="pinlbl dark" text-anchor="middle">SDA</text>
+<circle cx="666" cy="492" r="4" class="pin used"/>
+<text x="666" y="516" class="pinlbl dark" text-anchor="middle">SCL</text>
+<circle cx="790" cy="492" r="4" class="pin used"/>
+<text x="790" y="516" class="pinlbl dark" text-anchor="middle">VCC</text>
+<circle cx="860" cy="492" r="4" class="pin used"/>
+<text x="860" y="516" class="pinlbl dark" text-anchor="middle">GND</text>
+<polyline points="570,373 570,488" class="w-sda"/>
+<polyline points="666,373 666,488" class="w-scl"/>
+<polyline points="790,488 790,100" class="w-5v"/>
+<circle cx="790" cy="100" r="4.5" class="dot-5v"/>
+<polyline points="860,488 860,130" class="w-gnd"/>
+<circle cx="860" cy="130" r="4.5" class="dot-gnd"/>
+<text x="564" y="430" class="lbl lbl-sda" text-anchor="end">SDA</text>
+<text x="672" y="430" class="lbl lbl-scl">SCL</text>
+<text x="536" y="612" class="tiny">16x2 LCD with I2C board (Joy-IT)</text>
+</svg>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--w5v)"></i>5V</span>
+      <span><i class="sw" style="background:var(--wgnd)"></i>Ground</span>
+      <span><i class="sw" style="background:var(--wsda)"></i>I2C data (SDA)</span>
+      <span><i class="sw" style="background:var(--wscl)"></i>I2C clock (SCL)</span>
+      <span><i class="sw" style="background:var(--wsig)"></i>Signal</span>
+      <span>Yellow pins are the ones in use. Lines that cross without a dot are not connected.</span>
+    </div>
+  </section>
+
+  <section class="sheet" aria-labelledby="conn">
+    <h2 id="conn">Every connection</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>From</th><th>To</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip" style="background:var(--w5v)"></span>ESP32 <code>VIN</code></td><td>Breadboard + rail</td><td>Puts 5V from USB on the rail</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>ESP32 <code>GND</code></td><td>Breadboard − rail</td><td>Shared ground for everything</td></tr>
+          <tr><td><span class="chip" style="background:var(--w5v)"></span>LCD <code>VCC</code></td><td>+ rail (5V)</td><td>The LCD needs 5V to show text</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LCD <code>GND</code></td><td>− rail</td><td>Ground</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsda)"></span>LCD <code>SDA</code></td><td>ESP32 <code>D21</code></td><td>I2C data</td></tr>
+          <tr><td><span class="chip" style="background:var(--wscl)"></span>LCD <code>SCL</code></td><td>ESP32 <code>D22</code></td><td>I2C clock</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>RX2</code> (GPIO16)</td><td>Button, other leg to − rail</td><td>Reads LOW when pressed</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>D33</code></td><td>330 Ω resistor → LED long leg</td><td>The resistor limits current</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LED short leg</td><td>− rail</td><td>Ground</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="cols">
+    <section class="sheet" aria-labelledby="rules">
+      <h2 id="rules">Breadboard rules</h2>
+      <ul>
+        <li class="warn">Never connect a button or an ESP32 pin to the + rail. It carries 5V and the ESP32's pins are 3.3V.</li>
+        <li>Unplug USB before moving wires.</li>
+        <li>Put the ESP32 across the centre gap so each pin gets its own row.</li>
+        <li>Small 4-leg buttons: use two diagonally opposite legs.</li>
+        <li>LED: long leg toward D33, short leg to ground. Backwards, it stays dark.</li>
+      </ul>
+    </section>
+    <section class="sheet" aria-labelledby="checks">
+      <h2 id="checks">If something's off</h2>
+      <ul>
+        <li>LCD backlight on but no text: turn the blue screw on the back slowly.</li>
+        <li>Serial Monitor says no I2C device: check SDA and SCL aren't swapped.</li>
+        <li>Garbage in the Serial Monitor: set it to 115200 baud.</li>
+        <li>The LCD's I2C board pulls SDA and SCL up to 5V. Fine for bench tests. Add a level shifter for the final build.</li>
+      </ul>
+    </section>
+  </div>
+</main>

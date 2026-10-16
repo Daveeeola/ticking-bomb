@@ -161,6 +161,7 @@ Countdown length and puzzles to defuse (Solo), bonus time per solve, starting ti
 - `docs/sketches/`: the original notebook design pages
 - `docs/prototype/`: bench prototype photos
 - `docs/parts/`: photos of individual parts identified so far
+- `docs/wiring/bench-lcd-button-led.html`: bench schematic for the LCD (SDA D21, SCL D22, VCC on the 5V rail from VIN), button on RX2/GPIO16 and LED on D33 with a 330 ohm resistor. Live version: https://claude.ai/artifact/9uWQkzVuyBcbpDF7L1FDR5
 
 The live, editable versions of both docs are Claude Docs artifacts:
 - Working doc: https://claude.ai/code/artifact/8c65c04c-2bd5-4b40-bc18-978db05509d2
