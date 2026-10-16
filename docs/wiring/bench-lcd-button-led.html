@@ -97,6 +97,7 @@ td code, li code { font-family: var(--font-mono); font-size: 13px; }
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 .cols > * { min-width: 0; }
 ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.tablenote { margin: 12px 0 0; font-size: 13px; color: var(--muted); max-width: 70ch; }
 .warn { border-left: 3px solid var(--w5v); padding-left: 12px; }
 .keygrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 20px; }
 .keyitem { display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: center; min-width: 0; }
@@ -110,7 +111,7 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
   <header>
     <span class="eyebrow">Bench test · LCD, button, LED</span>
     <h1>Ticking Bomb Bench Wiring</h1>
-    <p class="lede">How the 30-pin ESP32, the 16x2 LCD, one button and one LED connect on the breadboard. Pin names match the labels printed on your board.</p>
+    <p class="lede">How the 30-pin ESP32, the 16x2 LCD, one button and one LED connect. The ESP32 sits off the breadboard, because it's too wide to fit. Pin names match the labels printed on your board.</p>
   </header>
 
   <section class="sheet" aria-label="Schematic">
@@ -282,20 +283,21 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
     <h2 id="conn">Every connection</h2>
     <div class="scroll">
       <table>
-        <thead><tr><th>From</th><th>To</th><th>Why</th></tr></thead>
+        <thead><tr><th>From</th><th>To</th><th>Wire</th><th>Why</th></tr></thead>
         <tbody>
-          <tr><td><span class="chip" style="background:var(--w5v)"></span>ESP32 <code>VIN</code></td><td>Breadboard + rail</td><td>Puts 5V from USB on the rail</td></tr>
-          <tr><td><span class="chip" style="background:var(--wgnd)"></span>ESP32 <code>GND</code></td><td>Breadboard − rail</td><td>Shared ground for everything</td></tr>
-          <tr><td><span class="chip" style="background:var(--w5v)"></span>LCD <code>VCC</code></td><td>+ rail (5V)</td><td>The LCD needs 5V to show text</td></tr>
-          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LCD <code>GND</code></td><td>− rail</td><td>Ground</td></tr>
-          <tr><td><span class="chip" style="background:var(--wsda)"></span>LCD <code>SDA</code></td><td>ESP32 <code>D21</code></td><td>I2C data</td></tr>
-          <tr><td><span class="chip" style="background:var(--wscl)"></span>LCD <code>SCL</code></td><td>ESP32 <code>D22</code></td><td>I2C clock</td></tr>
-          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>RX2</code> (GPIO16)</td><td>Button, other leg to − rail</td><td>Reads LOW when pressed</td></tr>
-          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>D33</code></td><td>330 Ω resistor → LED long leg</td><td>The resistor limits current</td></tr>
-          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LED short leg</td><td>− rail</td><td>Ground</td></tr>
+          <tr><td><span class="chip" style="background:var(--w5v)"></span>ESP32 <code>VIN</code></td><td>Breadboard + rail</td><td>F–M</td><td>Puts 5V from USB on the rail</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>ESP32 <code>GND</code></td><td>Breadboard − rail</td><td>F–M</td><td>Shared ground for everything</td></tr>
+          <tr><td><span class="chip" style="background:var(--w5v)"></span>LCD <code>VCC</code></td><td>+ rail (5V)</td><td>F–M</td><td>The LCD needs 5V to show text</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LCD <code>GND</code></td><td>− rail</td><td>F–M</td><td>Ground</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsda)"></span>LCD <code>SDA</code></td><td>ESP32 <code>D21</code></td><td>F–F</td><td>I2C data</td></tr>
+          <tr><td><span class="chip" style="background:var(--wscl)"></span>LCD <code>SCL</code></td><td>ESP32 <code>D22</code></td><td>F–F</td><td>I2C clock</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>RX2</code> (GPIO16)</td><td>Button leg row, then opposite leg row to − rail</td><td>F–M, then M–M</td><td>Reads LOW when pressed</td></tr>
+          <tr><td><span class="chip" style="background:var(--wsig)"></span>ESP32 <code>D33</code></td><td>Resistor row, resistor → LED long leg</td><td>F–M</td><td>The resistor limits current</td></tr>
+          <tr><td><span class="chip" style="background:var(--wgnd)"></span>LED short leg</td><td>− rail</td><td>M–M, or plug the leg straight into the rail</td><td>Ground</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="tablenote">F = female end (a socket, slides onto a pin). M = male end (a pin, plugs into the breadboard). Total: 6 F–M, 2 F–F, 2 M–M. Have a few spares.</p>
   </section>
 
   <div class="cols">
@@ -304,7 +306,7 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
       <ul>
         <li class="warn">Never connect a button or an ESP32 pin to the + rail. It carries 5V and the ESP32's pins are 3.3V.</li>
         <li>Unplug USB before moving wires.</li>
-        <li>Put the ESP32 across the centre gap so each pin gets its own row.</li>
+        <li>The ESP32 sits off the breadboard. Rest it on its foam or cardboard so its bare pins never touch each other or anything metal.</li>
         <li>Small 4-leg buttons: use two diagonally opposite legs.</li>
         <li>LED: long leg toward D33, short leg to ground. Backwards, it stays dark.</li>
       </ul>
