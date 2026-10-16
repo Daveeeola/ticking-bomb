@@ -98,6 +98,12 @@ td code, li code { font-family: var(--font-mono); font-size: 13px; }
 .cols > * { min-width: 0; }
 ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .warn { border-left: 3px solid var(--w5v); padding-left: 12px; }
+.keygrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 20px; }
+.keyitem { display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: center; min-width: 0; }
+.keyitem svg { min-width: 0; width: 80px; height: 40px; overflow: visible; }
+.keyitem div { display: grid; gap: 2px; min-width: 0; }
+.keyitem strong { font-size: 14px; }
+.keyitem span { font-size: 13px; color: var(--muted); line-height: 1.45; }
 </style>
 
 <main>
@@ -189,13 +195,14 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 <circle cx="282" cy="130" r="4.5" class="dot-gnd"/>
 <polyline points="506,257 506,200 540,200" class="w-sig"/>
 <polyline points="540,200 546,192 558,208 570,192 582,208 594,192 604,208 610,200" class="w-sig part"/>
-<text x="575" y="184" class="lbl" text-anchor="middle">330 Ω</text>
+<text x="575" y="180" class="lbl strong" text-anchor="middle">Resistor 330 Ω</text>
 <polyline points="610,200 640,200" class="w-sig"/>
 <polygon points="640,186 640,214 668,200" class="led"/>
 <line x1="670" y1="185" x2="670" y2="215" class="w-gnd part"/>
 <path d="M652,180 l10,-12 M662,168 l-5,1 M662,168 l-1,5 M662,184 l10,-12 M672,172 l-5,1 M672,172 l-1,5" class="rays"/>
-<text x="640" y="232" class="tiny" text-anchor="middle">long leg</text>
-<text x="684" y="232" class="tiny" text-anchor="start">short leg</text>
+<text x="696" y="178" class="lbl strong">LED</text>
+<text x="662" y="232" class="tiny" text-anchor="end">+ long leg</text>
+<text x="676" y="232" class="tiny" text-anchor="start">short leg −</text>
 <polyline points="670,200 760,200 760,130" class="w-gnd"/>
 <circle cx="760" cy="130" r="4.5" class="dot-gnd"/>
 <text x="498" y="226" class="lbl strong" text-anchor="end">LED on D33</text>
@@ -204,11 +211,11 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 <line x1="330" y1="426" x2="270" y2="426" class="w-ink part"/>
 <line x1="300" y1="426" x2="300" y2="414" class="w-ink part"/>
 <line x1="290" y1="414" x2="310" y2="414" class="w-ink part"/>
-<text x="300" y="466" class="lbl strong" text-anchor="middle">Button</text>
-<text x="300" y="482" class="tiny" text-anchor="middle">diagonal legs</text>
+<text x="300" y="466" class="lbl strong" text-anchor="middle">Push button</text>
+<text x="300" y="482" class="tiny" text-anchor="middle">connects only while pressed</text>
 <polyline points="270,440 160,440 160,130" class="w-gnd"/>
 <circle cx="160" cy="130" r="4.5" class="dot-gnd"/>
-<text x="418" y="414" class="tiny">GPIO16</text>
+<text x="418" y="414" class="tiny">RX2 = GPIO16</text>
 <rect x="520" y="480" width="400" height="120" rx="8" class="lcd"/>
 <rect x="560" y="530" width="320" height="52" rx="3" class="lcd-glass"/>
 <text x="720" y="562" class="lcd-text" text-anchor="middle">Hello World!</text>
@@ -237,10 +244,40 @@ ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
       <span><i class="sw" style="background:var(--wsda)"></i>I2C data (SDA)</span>
       <span><i class="sw" style="background:var(--wscl)"></i>I2C clock (SCL)</span>
       <span><i class="sw" style="background:var(--wsig)"></i>Signal</span>
-      <span>Yellow pins are the ones in use. Lines that cross without a dot are not connected.</span>
+      <span>Symbols are explained below the diagram.</span>
     </div>
   </section>
 
+
+  <section class="sheet" aria-labelledby="key">
+    <h2 id="key">What the symbols mean</h2>
+    <div class="keygrid">
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><polyline points="4,20 14,20 20,10 30,30 40,10 50,30 60,10 66,20 76,20" class="w-sig"/></svg>
+        <div><strong>Resistor</strong><span>Limits current. The 330 Ω one stops the LED from burning out. It works either way round.</span></div>
+      </div>
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><line x1="4" y1="20" x2="28" y2="20" class="w-sig"/><polygon points="28,8 28,32 50,20" class="led"/><line x1="51" y1="7" x2="51" y2="33" class="w-gnd"/><line x1="51" y1="20" x2="76" y2="20" class="w-gnd"/><path d="M38,6 l8,-6 M48,8 l8,-6" class="rays"/></svg>
+        <div><strong>LED</strong><span>Lights up. Current only flows the way the triangle points: long leg (+) on the triangle side, short leg (−) on the bar side.</span></div>
+      </div>
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><line x1="4" y1="30" x2="20" y2="30" class="w-sig"/><circle cx="22" cy="30" r="3" class="node"/><circle cx="58" cy="30" r="3" class="node"/><line x1="20" y1="20" x2="60" y2="20" class="w-ink"/><line x1="40" y1="20" x2="40" y2="10" class="w-ink"/><line x1="32" y1="10" x2="48" y2="10" class="w-ink"/><line x1="60" y1="30" x2="76" y2="30" class="w-gnd"/></svg>
+        <div><strong>Push button</strong><span>The bar is the button's top. Pressing it joins the two contacts, so RX2 is connected to ground.</span></div>
+      </div>
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><line x1="4" y1="20" x2="76" y2="20" class="w-gnd thick"/><line x1="40" y1="20" x2="40" y2="38" class="w-gnd"/><circle cx="40" cy="20" r="4.5" class="dot-gnd"/></svg>
+        <div><strong>Dot on a line</strong><span>A real connection. Lines that cross without a dot just pass over each other.</span></div>
+      </div>
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><line x1="4" y1="14" x2="76" y2="14" class="w-5v thick"/><line x1="4" y1="28" x2="76" y2="28" class="w-gnd thick"/></svg>
+        <div><strong>Rails</strong><span>The long + and − strips down the side of your breadboard. Anything plugged into a strip shares it.</span></div>
+      </div>
+      <div class="keyitem">
+        <svg viewBox="0 0 80 40" aria-hidden="true"><rect x="10" y="8" width="60" height="24" rx="5" class="pcb"/><circle cx="26" cy="20" r="5" class="pin used"/><circle cx="54" cy="20" r="5" class="pin"/></svg>
+        <div><strong>Board pins</strong><span>Yellow means used in this test. Empty circles are free for later.</span></div>
+      </div>
+    </div>
+  </section>
   <section class="sheet" aria-labelledby="conn">
     <h2 id="conn">Every connection</h2>
     <div class="scroll">
