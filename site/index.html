@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Reset Protocol: a physical party game. Pass it. Solve it. Don't shake it.">
-<meta property="og:title" content="Reset Protocol"><meta property="og:description" content="A ball-shaped bomb ticks down in your hands. Pass it. Solve it. Don't shake it."><meta property="og:image" content="img/bench.jpg">
+<meta property="og:title" content="Reset Protocol"><meta property="og:description" content="A ball-shaped bomb ticks down in your hands. Pass it. Solve it. Don't shake it."><meta property="og:image" content="img/final-front.jpg">
 <title>Reset Protocol</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,9 +54,10 @@ nav ul a:hover{color:var(--hazard)}
 .hero .lede{margin-top:24px;max-width:56ch;font-size:18px;color:#D6D6D0}
 .meta{margin-top:22px;font:500 13px/1.6 var(--mono);color:var(--dim)}
 
-.bombbox{position:relative;display:grid;place-items:center}
-.bomb{width:min(100%,420px);aspect-ratio:1;max-width:100%}
-.clock{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);font:900 clamp(44px,6vw,72px)/1 var(--display);letter-spacing:.06em;color:var(--red);background:#000;padding:6px 18px 4px;border:2px solid var(--line);font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(255,59,48,.6)}
+.bombbox{position:relative;display:grid;place-items:center;aspect-ratio:1;width:min(100%,460px);max-width:100%;margin-inline:auto}
+.bombbox .ring{position:absolute;inset:0;width:100%;height:100%}
+.bombbox .bomb{position:relative;width:78%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(255,196,0,.18))}
+.clock{position:absolute;left:50%;bottom:-2%;transform:translateX(-50%);font:900 clamp(44px,6vw,72px)/1 var(--display);letter-spacing:.06em;color:var(--red);background:#000;padding:6px 18px 4px;border:2px solid var(--line);font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(255,59,48,.6)}
 .flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:50}
 .boom{position:absolute;inset:0;display:grid;place-items:center;font:900 clamp(80px,14vw,160px)/1 var(--display);color:var(--hazard);opacity:0;pointer-events:none;text-shadow:0 0 30px rgba(255,196,0,.5)}
 
@@ -75,7 +76,7 @@ section.chapter{padding-block:80px}
 /* the bomb */
 .bombgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px}
 .photo{border:1px solid var(--line);background:var(--panel)}
-.photo img{width:100%;height:100%;object-fit:cover}
+.photo img{width:100%;height:auto;object-fit:cover}
 .photo figcaption{font:500 12px/1.5 var(--mono);color:var(--dim);padding:10px 14px;border-top:1px solid var(--line)}
 figure{margin:0}
 .specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}
@@ -141,6 +142,21 @@ figure{margin:0}
 .mode small{font:700 12px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
 .mode p{font-size:15px;color:#CFCFC9;line-height:1.5}
 
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.shot{display:flex;flex-direction:column;gap:8px;min-width:0}
+.shot .open{all:unset;cursor:zoom-in;display:block;aspect-ratio:4/5;max-width:100%;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.shot .open:focus-visible{outline:2px solid var(--hazard);outline-offset:3px}
+.shot img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.shot .open:hover img{transform:scale(1.04)}
+.shot figcaption{font-size:14px;line-height:1.45;color:#CFCFC9}
+.shot figcaption b{display:block;font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--hazard);margin-bottom:2px}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,1100px);max-height:92vh;color:var(--text)}
+.lightbox::backdrop{background:rgba(5,5,6,.92)}
+.lightbox img{display:block;max-width:100%;max-height:82vh;margin:0 auto;border:1px solid var(--line)}
+.lightbox p{text-align:center;margin-top:10px;font:500 13px/1.5 var(--mono);color:var(--dim)}
+.lightbox .close{position:absolute;top:6px;right:6px;width:40px;height:40px;border:0;border-radius:50%;background:var(--hazard);color:var(--ink);font:700 22px/1 var(--body);cursor:pointer}
+
 /* devlog */
 .log{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start}
 .entries{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
@@ -165,7 +181,7 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
   .win{grid-template-columns:minmax(0,1fr)}
   .side{position:static}
   .bombbox{order:-1}
-  .bomb{width:min(100%,320px)}
+  .bombbox{width:min(100%,340px)}
 }
 @media (max-width:520px){
   .flow,.modes,.beats,.specs{grid-template-columns:minmax(0,1fr)}
@@ -185,6 +201,7 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
     <a class="brand" href="#top"><i aria-hidden="true"></i>RESET PROTOCOL</a>
     <ul>
       <li><a href="#bomb">The bomb</a></li>
+      <li><a href="#build">Build</a></li>
       <li><a href="#trailer">Trailer</a></li>
       <li><a href="#saboteur">Saboteur mode</a></li>
       <li><a href="#devlog">Dev log</a></li>
@@ -202,22 +219,12 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
       <p class="meta">Made by David Olamide and Fardoush Hassan<br>REPLAY Master's in Game Design, Lusófona University, Lisbon</p>
     </div>
     <div class="bombbox">
-      <svg class="bomb" viewBox="0 0 400 400" role="img" aria-label="The Reset Protocol bomb: a matte black ball with a yellow band round the middle and a ring of coloured lights">
-        <defs>
-          <radialGradient id="shine" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#3A3A42"/><stop offset=".55" stop-color="#141417"/><stop offset="1" stop-color="#050506"/></radialGradient>
-          <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset=".55" stop-color="#FFC400" stop-opacity=".18"/><stop offset="1" stop-color="#FFC400" stop-opacity="0"/></radialGradient>
-        </defs>
-        <circle cx="200" cy="190" r="190" fill="url(#glow)"/>
+      <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+        <defs><radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset=".45" stop-color="#FFC400" stop-opacity=".22"/><stop offset="1" stop-color="#FFC400" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="200" cy="200" r="198" fill="url(#glow)"/>
         <g id="leds"></g>
-        <circle cx="200" cy="190" r="132" fill="url(#shine)" stroke="#2A2A31" stroke-width="2"/>
-        <path d="M68 196 Q200 246 332 196 L332 176 Q200 226 68 176 Z" fill="#FFC400"/>
-        <rect x="160" y="112" width="80" height="44" rx="4" fill="#000" stroke="#33333B" stroke-width="3"/>
-        <text x="200" y="141" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#7CC6FF" id="oledtxt">BLUE</text>
-        <g fill="#0C0C0E" stroke="#3A3A42" stroke-width="2">
-          <circle cx="146" cy="262" r="14"/><circle cx="254" cy="262" r="14"/>
-        </g>
-        <g><circle cx="176" cy="292" r="7" fill="#FFC400"/><circle cx="194" cy="296" r="7" fill="#2F6BFF"/><circle cx="212" cy="296" r="7" fill="#FF3B30"/><circle cx="230" cy="292" r="7" fill="#22C55E"/></g>
       </svg>
+      <img class="bomb" src="img/bomb-hero.png" alt="The finished Reset Protocol bomb: a matte black ball with a small screen showing the menu, a 1 to 4 keypad and lettered colour buttons" width="900" height="900">
       <div class="clock" id="clock" aria-hidden="true">00:15</div>
       <div class="boom" id="boom" aria-hidden="true">BOOM</div>
     </div>
@@ -234,8 +241,8 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
     </div>
     <div class="bombgrid">
       <figure class="photo">
-        <img src="img/bench.jpg" alt="The first bench prototype: arcade buttons pushed through cardboard, an ESP32, keypad, LED strip, speaker and vibration motors spread across a desk" width="1400" height="788" loading="lazy">
-        <figcaption>The first bench prototype, October 2026. Cardboard, a lot of jumper wires and every part we had.</figcaption>
+        <img src="img/final-front.jpg" alt="The finished bomb held in one hand: matte black panels, the screen in the middle, the 1 to 4 keypad, an X button and lettered colour buttons" width="787" height="1400" loading="lazy" style="aspect-ratio:4/5;object-position:50% 45%">
+        <figcaption>The finished bomb. Everything you play with is on the ball.</figcaption>
       </figure>
       <div>
         <div class="specs">
@@ -259,6 +266,37 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
     </div>
   </div>
 </section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="build">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">The build</div><h2>Bench to bomb</h2></div>
+      <p>From a cardboard board full of buttons to a painted ball you can throw a party around. Tap a photo to see it bigger.</p>
+    </div>
+    <div class="gallery">
+        <figure class="shot"><button type="button" class="open" data-src="img/bench.jpg" aria-label="Open photo: First bench prototype: buttons pushed through cardboard and every part we had."><img src="img/bench.jpg" alt="First bench prototype: buttons pushed through cardboard and every part we had." loading="lazy"></button><figcaption><b>Bench</b>First bench prototype: buttons pushed through cardboard and every part we had.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/bench2.jpg" aria-label="Open photo: Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires."><img src="img/bench2.jpg" alt="Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires." loading="lazy"></button><figcaption><b>Bench</b>Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-1.jpg" aria-label="Open photo: The ESP32 soldered onto a 7 x 9 cm perfboard: the core board."><img src="img/core-1.jpg" alt="The ESP32 soldered onto a 7 x 9 cm perfboard: the core board." loading="lazy"></button><figcaption><b>Core board</b>The ESP32 soldered onto a 7 x 9 cm perfboard: the core board.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-2.jpg" aria-label="Open photo: Motion sensor and multiplexer go on."><img src="img/core-2.jpg" alt="Motion sensor and multiplexer go on." loading="lazy"></button><figcaption><b>Core board</b>Motion sensor and multiplexer go on.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-3.jpg" aria-label="Open photo: Headers for every part, so each one plugs in."><img src="img/core-3.jpg" alt="Headers for every part, so each one plugs in." loading="lazy"></button><figcaption><b>Core board</b>Headers for every part, so each one plugs in.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-4.jpg" aria-label="Open photo: Everything plugged in for the first full test."><img src="img/core-4.jpg" alt="Everything plugged in for the first full test." loading="lazy"></button><figcaption><b>Core board</b>Everything plugged in for the first full test.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-5.jpg" aria-label="Open photo: The back, wired, with the 1 to 4 keypad on its plug."><img src="img/core-5.jpg" alt="The back, wired, with the 1 to 4 keypad on its plug." loading="lazy"></button><figcaption><b>Core board</b>The back, wired, with the 1 to 4 keypad on its plug.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/shell-1.jpg" aria-label="Open photo: Fitting the core board inside the shell."><img src="img/shell-1.jpg" alt="Fitting the core board inside the shell." loading="lazy"></button><figcaption><b>Into the ball</b>Fitting the core board inside the shell.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/team.jpg" aria-label="Open photo: Threading the lights between the panels."><img src="img/team.jpg" alt="Threading the lights between the panels." loading="lazy"></button><figcaption><b>Into the ball</b>Threading the lights between the panels.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/shell-2.jpg" aria-label="Open photo: First boot inside the ball, still blue."><img src="img/shell-2.jpg" alt="First boot inside the ball, still blue." loading="lazy"></button><figcaption><b>Into the ball</b>First boot inside the ball, still blue.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/shell-3.jpg" aria-label="Open photo: Lights on and the menu up."><img src="img/shell-3.jpg" alt="Lights on and the menu up." loading="lazy"></button><figcaption><b>Into the ball</b>Lights on and the menu up.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/paint.jpg" aria-label="Open photo: Matte black paint and lettered button caps."><img src="img/paint.jpg" alt="Matte black paint and lettered button caps." loading="lazy"></button><figcaption><b>The look</b>Matte black paint and lettered button caps.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/final-side.jpg" aria-label="Open photo: Hazard stripes on the side panels."><img src="img/final-side.jpg" alt="Hazard stripes on the side panels." loading="lazy"></button><figcaption><b>The look</b>Hazard stripes on the side panels.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/final-g.jpg" aria-label="Open photo: Side view: green button and the strip glowing through."><img src="img/final-g.jpg" alt="Side view: green button and the strip glowing through." loading="lazy"></button><figcaption><b>The look</b>Side view: green button and the strip glowing through.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/final-top.jpg" aria-label="Open photo: Top: both knobs and the red START button."><img src="img/final-top.jpg" alt="Top: both knobs and the red START button." loading="lazy"></button><figcaption><b>The look</b>Top: both knobs and the red START button.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/final-hand.jpg" aria-label="Open photo: In the hand: keypad, X and blue."><img src="img/final-hand.jpg" alt="In the hand: keypad, X and blue." loading="lazy"></button><figcaption><b>The look</b>In the hand: keypad, X and blue.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/mask.jpg" aria-label="Open photo: Trailer test: the saboteur and the bomb."><img src="img/mask.jpg" alt="Trailer test: the saboteur and the bomb." loading="lazy"></button><figcaption><b>Trailer</b>Trailer test: the saboteur and the bomb.</figcaption></figure>
+    </div>
+  </div>
+</section>
+<dialog class="lightbox" id="lightbox" aria-label="Photo"><button type="button" class="close" id="lbclose" aria-label="Close">×</button><img id="lbimg" alt=""><p id="lbcap"></p></dialog>
 
 <div class="tape" aria-hidden="true"></div>
 
@@ -483,8 +521,8 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
           <figcaption>Day one: the flow in a notebook. The impostor mode is already in the margin.</figcaption>
         </figure>
         <figure class="photo">
-          <img src="img/closeup.jpg" alt="Close-up of the bench prototype wiring" width="1000" height="563" loading="lazy">
-          <figcaption>Bench wiring, before the core board.</figcaption>
+          <img src="img/mask.jpg" alt="A player in a black balaclava holding the bomb" width="1045" height="1400" loading="lazy">
+          <figcaption>Testing the trailer look: one mask, one bomb.</figcaption>
         </figure>
         <figure class="oled"><img src="img/oled-dials.png" alt="Bomb screen: TURN BOTH KNOBS, two dials with progress bars" width="384" height="212"></figure>
       </aside>
@@ -511,6 +549,14 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
 </footer>
 
 <script>
+(function(){
+  var lb=document.getElementById('lightbox'), im=document.getElementById('lbimg'), cap=document.getElementById('lbcap');
+  if(!lb||!lb.showModal) return;
+  document.querySelectorAll('.shot .open').forEach(function(b){ b.addEventListener('click',function(){
+    var i=b.querySelector('img'); im.src=b.getAttribute('data-src'); im.alt=i.alt; cap.textContent=i.alt; lb.showModal(); }); });
+  document.getElementById('lbclose').addEventListener('click',function(){ lb.close(); });
+  lb.addEventListener('click',function(e){ if(e.target===lb) lb.close(); });
+})();
 /* VIDEOS: paste a YouTube link or a file path (e.g. "videos/trailer.mp4") between the quotes. Leave empty to show the "coming soon" frame. */
 var VIDEOS = {
   trailer: "",
@@ -533,7 +579,7 @@ var VIDEOS = {
   var g=document.getElementById('leds'), ns='http://www.w3.org/2000/svg', leds=[];
   for(var i=0;i<30;i++){
     var a=(i/30)*Math.PI*2-Math.PI/2, c=document.createElementNS(ns,'circle');
-    c.setAttribute('cx',(200+160*Math.cos(a)).toFixed(1)); c.setAttribute('cy',(190+160*Math.sin(a)).toFixed(1));
+    c.setAttribute('cx',(200+182*Math.cos(a)).toFixed(1)); c.setAttribute('cy',(200+182*Math.sin(a)).toFixed(1));
     c.setAttribute('r','5.5'); c.setAttribute('fill','#222228'); g.appendChild(c); leds.push(c);
   }
   var clock=document.getElementById('clock'), boom=document.getElementById('boom'), flash=document.getElementById('flash'), oled=document.getElementById('oledtxt');
@@ -542,7 +588,7 @@ var VIDEOS = {
   function paint(){
     var lit=Math.ceil(t/15*30);
     for(var i=0;i<30;i++) leds[i].setAttribute('fill', i<lit ? (t<=3 && t%1===0 ? '#FF3B30' : cols[holder]) : '#222228');
-    clock.textContent='00:'+(t<10?'0':'')+t; oled.textContent=names[holder];
+    clock.textContent='00:'+(t<10?'0':'')+t; if(oled) oled.textContent=names[holder];
   }
   if(still){ t=7; paint(); return; }
   paint();
