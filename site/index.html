@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Reset Protocol: a physical party game. Pass it. Solve it. Don't shake it.">
+<meta name="description" content="Reset Protocol: a hidden-saboteur party game played on a ball-shaped bomb.">
 <meta property="og:title" content="Reset Protocol"><meta property="og:description" content="A ball-shaped bomb ticks down in your hands. Pass it. Solve it. Don't shake it."><meta property="og:image" content="img/final-front.jpg">
 <title>Reset Protocol</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,11 +46,16 @@ nav ul a:hover{color:var(--hazard)}
 /* hero */
 .hero{padding-block:56px 64px;position:relative;overflow:hidden}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center}
-.hero h1{font-size:clamp(64px,11vw,148px);font-weight:900;text-transform:uppercase;line-height:.84}
+.hero h1{font-size:clamp(60px,9vw,120px);font-weight:900;text-transform:uppercase;line-height:.84}
 .hero h1 span{display:block;color:var(--hazard)}
 .rules{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
 .rules b{font:800 clamp(20px,2.4vw,28px)/1 var(--display);text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border:2px solid var(--text)}
 .rules b:last-child{background:var(--hazard);color:var(--ink);border-color:var(--hazard)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{font:800 18px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--text);padding:14px 20px;border:2px solid var(--line)}
+.btn:hover{border-color:var(--hazard);color:var(--hazard)}
+.btn.hot{background:var(--hazard);border-color:var(--hazard);color:var(--ink)}
+.btn.hot:hover{color:var(--ink);filter:brightness(1.1)}
 .hero .lede{margin-top:24px;max-width:56ch;font-size:18px;color:#D6D6D0}
 .meta{margin-top:22px;font:500 13px/1.6 var(--mono);color:var(--dim)}
 
@@ -200,10 +205,10 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
   <div class="wrap">
     <a class="brand" href="#top"><i aria-hidden="true"></i>RESET PROTOCOL</a>
     <ul>
+      <li><a href="#trailer">Trailer</a></li>
+      <li><a href="#play">How to play</a></li>
       <li><a href="#bomb">The bomb</a></li>
       <li><a href="#build">Build</a></li>
-      <li><a href="#trailer">Trailer</a></li>
-      <li><a href="#saboteur">Saboteur mode</a></li>
       <li><a href="#devlog">Dev log</a></li>
     </ul>
   </div>
@@ -212,10 +217,11 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <div class="label">A physical party game for 2 to 8 players</div>
+      <div class="label">A hidden-saboteur party game for 4 to 8 players</div>
       <h1 style="margin-top:18px">Reset <span>Protocol</span></h1>
-      <div class="rules"><b>Pass it.</b><b>Solve it.</b><b>Don't shake it.</b></div>
-      <p class="lede">A ball-shaped bomb ticks down in your hands. Solve its puzzle with the keys, knobs, buttons and your voice, then get rid of it before the clock runs out. Shake it too hard and it goes off.</p>
+      <div class="rules"><b>Pass it.</b><b>Solve it.</b><b>Find the saboteur.</b></div>
+      <p class="lede">A ball-shaped bomb goes round the table. Everyone does the same quick puzzle on it, and one of you is secretly sabotaging it. Watch the hands, vote them out, and don't shake it: it goes off.</p>
+      <div class="cta"><a class="btn hot" href="#trailer">Watch the trailer</a><a class="btn" href="#play">How to play</a></div>
       <p class="meta">Made by David Olamide and Fardoush Hassan<br>REPLAY Master's in Game Design, Lusófona University, Lisbon</p>
     </div>
     <div class="bombbox">
@@ -233,97 +239,29 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
 
 <div class="tape" aria-hidden="true"></div>
 
-<section class="chapter" id="bomb">
-  <div class="wrap">
-    <div class="head">
-      <div><div class="label">The bomb</div><h2>Everything happens on the ball</h2></div>
-      <p>No laptop, no base station, no screen to look at. One ESP32 inside the ball runs the whole game: the puzzles, the clock, the lights, the sound and the buzz in your hands. Switch it on and play.</p>
-    </div>
-    <div class="bombgrid">
-      <figure class="photo">
-        <img src="img/final-front.jpg" alt="The finished bomb held in one hand: matte black panels, the screen in the middle, the 1 to 4 keypad, an X button and lettered colour buttons" width="787" height="1400" loading="lazy" style="aspect-ratio:4/5;object-position:50% 45%">
-        <figcaption>The finished bomb. Everything you play with is on the ball.</figcaption>
-      </figure>
-      <div>
-        <div class="specs">
-          <div><b>4 keys</b><small>Number keys 1 to 4 for codes and answers</small></div>
-          <div><b>4 + X</b><small>Yellow, blue, red and green buttons, plus X to cancel</small></div>
-          <div><b>2 knobs</b><small>Turned and pressed, often both at once</small></div>
-          <div><b>Mic</b><small>Some puzzles want you to shout at it</small></div>
-          <div><b>Motion</b><small>Feels every bump. Shake it and it blows</small></div>
-          <div><b>OLED</b><small>Small screen for the puzzle and your secret role</small></div>
-          <div><b>40 LEDs</b><small>Five sections of light: timer, colours, the holder</small></div>
-          <div><b>Sound + buzz</b><small>8-bit sound and a motor you feel in your hands</small></div>
-        </div>
-        <div style="margin-top:24px" class="strip" aria-label="LED strip: five sections in the player colours" role="img">
-          <span style="color:var(--p-red)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
-          <span style="color:var(--p-blue)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
-          <span style="color:var(--p-green)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
-          <span style="color:var(--p-yellow)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
-          <span><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="tape" aria-hidden="true"></div>
-
-<section class="chapter" id="build">
-  <div class="wrap">
-    <div class="head">
-      <div><div class="label">The build</div><h2>Bench to bomb</h2></div>
-      <p>From a cardboard board full of buttons to a painted ball you can throw a party around. Tap a photo to see it bigger.</p>
-    </div>
-    <div class="gallery">
-        <figure class="shot"><button type="button" class="open" data-src="img/bench.jpg" aria-label="Open photo: First bench prototype: buttons pushed through cardboard and every part we had."><img src="img/bench.jpg" alt="First bench prototype: buttons pushed through cardboard and every part we had." loading="lazy"></button><figcaption><b>Bench</b>First bench prototype: buttons pushed through cardboard and every part we had.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/bench2.jpg" aria-label="Open photo: Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires."><img src="img/bench2.jpg" alt="Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires." loading="lazy"></button><figcaption><b>Bench</b>Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/core-1.jpg" aria-label="Open photo: The ESP32 soldered onto a 7 x 9 cm perfboard: the core board."><img src="img/core-1.jpg" alt="The ESP32 soldered onto a 7 x 9 cm perfboard: the core board." loading="lazy"></button><figcaption><b>Core board</b>The ESP32 soldered onto a 7 x 9 cm perfboard: the core board.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/core-2.jpg" aria-label="Open photo: Motion sensor and multiplexer go on."><img src="img/core-2.jpg" alt="Motion sensor and multiplexer go on." loading="lazy"></button><figcaption><b>Core board</b>Motion sensor and multiplexer go on.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/core-3.jpg" aria-label="Open photo: Headers for every part, so each one plugs in."><img src="img/core-3.jpg" alt="Headers for every part, so each one plugs in." loading="lazy"></button><figcaption><b>Core board</b>Headers for every part, so each one plugs in.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/core-4.jpg" aria-label="Open photo: Everything plugged in for the first full test."><img src="img/core-4.jpg" alt="Everything plugged in for the first full test." loading="lazy"></button><figcaption><b>Core board</b>Everything plugged in for the first full test.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/core-5.jpg" aria-label="Open photo: The back, wired, with the 1 to 4 keypad on its plug."><img src="img/core-5.jpg" alt="The back, wired, with the 1 to 4 keypad on its plug." loading="lazy"></button><figcaption><b>Core board</b>The back, wired, with the 1 to 4 keypad on its plug.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/shell-1.jpg" aria-label="Open photo: Fitting the core board inside the shell."><img src="img/shell-1.jpg" alt="Fitting the core board inside the shell." loading="lazy"></button><figcaption><b>Into the ball</b>Fitting the core board inside the shell.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/team.jpg" aria-label="Open photo: Threading the lights between the panels."><img src="img/team.jpg" alt="Threading the lights between the panels." loading="lazy"></button><figcaption><b>Into the ball</b>Threading the lights between the panels.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/shell-2.jpg" aria-label="Open photo: First boot inside the ball, still blue."><img src="img/shell-2.jpg" alt="First boot inside the ball, still blue." loading="lazy"></button><figcaption><b>Into the ball</b>First boot inside the ball, still blue.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/shell-3.jpg" aria-label="Open photo: Lights on and the menu up."><img src="img/shell-3.jpg" alt="Lights on and the menu up." loading="lazy"></button><figcaption><b>Into the ball</b>Lights on and the menu up.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/paint.jpg" aria-label="Open photo: Matte black paint and lettered button caps."><img src="img/paint.jpg" alt="Matte black paint and lettered button caps." loading="lazy"></button><figcaption><b>The look</b>Matte black paint and lettered button caps.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/final-side.jpg" aria-label="Open photo: Hazard stripes on the side panels."><img src="img/final-side.jpg" alt="Hazard stripes on the side panels." loading="lazy"></button><figcaption><b>The look</b>Hazard stripes on the side panels.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/final-g.jpg" aria-label="Open photo: Side view: green button and the strip glowing through."><img src="img/final-g.jpg" alt="Side view: green button and the strip glowing through." loading="lazy"></button><figcaption><b>The look</b>Side view: green button and the strip glowing through.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/final-top.jpg" aria-label="Open photo: Top: both knobs and the red START button."><img src="img/final-top.jpg" alt="Top: both knobs and the red START button." loading="lazy"></button><figcaption><b>The look</b>Top: both knobs and the red START button.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/final-hand.jpg" aria-label="Open photo: In the hand: keypad, X and blue."><img src="img/final-hand.jpg" alt="In the hand: keypad, X and blue." loading="lazy"></button><figcaption><b>The look</b>In the hand: keypad, X and blue.</figcaption></figure>
-        <figure class="shot"><button type="button" class="open" data-src="img/mask.jpg" aria-label="Open photo: Trailer test: the saboteur and the bomb."><img src="img/mask.jpg" alt="Trailer test: the saboteur and the bomb." loading="lazy"></button><figcaption><b>Trailer</b>Trailer test: the saboteur and the bomb.</figcaption></figure>
-    </div>
-  </div>
-</section>
-<dialog class="lightbox" id="lightbox" aria-label="Photo"><button type="button" class="close" id="lbclose" aria-label="Close">×</button><img id="lbimg" alt=""><p id="lbcap"></p></dialog>
-
-<div class="tape" aria-hidden="true"></div>
-
 <section class="chapter" id="trailer">
   <div class="wrap">
     <div class="head">
-      <div><div class="label">Trailer</div><h2>Sixty seconds, one bomb</h2></div>
+      <div><div class="label">Trailer</div><h2>See it go off</h2></div>
       <p>One bomb, one table, a group of players and a lot of panic. Watch it in action.</p>
     </div>
-    <div class="trailer" data-video="trailer" data-title="Trailer coming soon" data-len="01:00">
-      <span class="tc tl">● REC</span><span class="tc tr">00:00 / 01:00</span>
-      <div class="inner">
+    <div class="trailer" data-video="trailer">
+      <a class="inner" href="https://www.youtube.com/watch?v=KT34hxqrFIs" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
         <div class="play" aria-hidden="true"></div>
-        <h3>Trailer coming soon</h3>
-        <p>It will play here once it's up.</p>
-      </div>
+        <h3>Watch the trailer</h3>
+        <p>Opens on YouTube</p>
+      </a>
     </div>
   </div>
 </section>
 
 <div class="tape" aria-hidden="true"></div>
 
-<section class="chapter sab" id="saboteur">
+<section class="chapter sab" id="play">
   <div class="wrap">
     <div class="head">
-      <div><div class="label">Game design · Saboteur mode</div><h2>Same puzzle. Who's faking it?</h2></div>
-      <p>A hidden-role mode for 4 to 8 players. Everyone does the same short puzzle on the bomb, one after another, while the rest of the table watches. One of them is secretly working for the bomb, and has to slip an extra move into their turn without anyone noticing.</p>
+      <div><div class="label">How to play</div><h2>Same puzzle. Who's faking it?</h2></div>
+      <p>Everyone does the same short puzzle on the bomb, one after another, while the rest of the table watches. One of you is secretly working for the bomb and has to slip an extra move into their turn without anyone noticing. Every round brings a new puzzle.</p>
     </div>
 
     <ol class="flow">
@@ -375,26 +313,6 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
       </div>
     </div>
 
-    <div class="puzzles">
-      <div>
-        <h3>11 puzzles, 3 secret moves each</h3>
-        <p class="note">Every puzzle has its own set of sabotages, so the thing to watch changes every round. Each puzzle comes up once before any repeats.</p>
-      </div>
-      <div class="chips">
-        <span><i>01</i>Shout on the blocks</span>
-        <span><i>02</i>Turn both knobs</span>
-        <span><i>03</i>Tap the keys</span>
-        <span><i>04</i>Copy the lights</span>
-        <span><i>05</i>Keep it level</span>
-        <span><i>06</i>Do the sum</span>
-        <span><i>07</i>Type the mix</span>
-        <span><i>08</i>Remember the lights</span>
-        <span><i>09</i>Turn to the mark</span>
-        <span><i>10</i>Stop in the box</span>
-        <span><i>11</i>Shake it 3 times</span>
-      </div>
-    </div>
-
     <div class="win">
       <div><b>Shake it, it blows</b><span>Too hard a jolt, or running out of time, and you're out on the spot, whoever you are.</span></div>
       <div><b>Civilians win</b><span>When every saboteur has been voted out.</span></div>
@@ -403,20 +321,68 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
   </div>
 </section>
 
-<section class="chapter" id="modes">
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="bomb">
   <div class="wrap">
     <div class="head">
-      <div><div class="label">More ways to play</div><h2>Four modes on one ball</h2></div>
-      <p>Pick a mode, a player count and a difficulty on the bomb itself. The colour you wear on your headband is the colour the bomb calls.</p>
+      <div><div class="label">The bomb</div><h2>Everything happens on the ball</h2></div>
+      <p>No laptop, no base station, no screen to look at. One ESP32 inside the ball runs the whole game: the puzzles, the clock, the lights, the sound and the buzz in your hands. Switch it on and play.</p>
     </div>
-    <div class="modes">
-      <div class="mode"><small>2 to 8 players</small><b>Classic</b><p>Solve your puzzle before the clock runs out, or gamble on a pass. Explode and you're out. Last one standing wins.</p></div>
-      <div class="mode"><small>4 to 8 players</small><b>Bomber</b><p>Secret bombers mark crew members for a panic round. Defuse enough puzzles before they take over.</p></div>
-      <div class="mode hl"><small>4 to 8 players</small><b>Saboteur</b><p>Same puzzle for everyone. One of you adds a secret move. Find them.</p></div>
-      <div class="mode"><small>4 to 8 players</small><b>Secret rule</b><p>Everyone knows where the token should land, except one. Move it, blend in, vote.</p></div>
+    <div class="bombgrid">
+      <figure class="photo">
+        <img src="img/final-front.jpg" alt="The finished bomb held in one hand: matte black panels, the screen in the middle, the 1 to 4 keypad, an X button and lettered colour buttons" width="787" height="1400" loading="lazy" style="aspect-ratio:4/5;object-position:50% 45%">
+        <figcaption>The finished bomb. Everything you play with is on the ball.</figcaption>
+      </figure>
+      <div>
+        <div class="specs">
+          <div><b>4 keys</b><small>Number keys 1 to 4 for codes and answers</small></div>
+          <div><b>4 + X</b><small>Yellow, blue, red and green buttons, plus X to cancel</small></div>
+          <div><b>2 knobs</b><small>Turned and pressed, often both at once</small></div>
+          <div><b>Mic</b><small>Some puzzles want you to shout at it</small></div>
+          <div><b>Motion</b><small>Feels every bump. Shake it and it blows</small></div>
+          <div><b>OLED</b><small>Small screen for the puzzle and your secret role</small></div>
+          <div><b>40 LEDs</b><small>Five sections of light: timer, colours, the holder</small></div>
+          <div><b>Sound + buzz</b><small>8-bit sound and a motor you feel in your hands</small></div>
+        </div>
+        <div style="margin-top:24px" class="strip" aria-label="LED strip: five sections in the player colours" role="img">
+          <span style="color:var(--p-red)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-blue)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-green)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-yellow)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+          <span><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="build">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">The build</div><h2>Bench to bomb</h2></div>
+      <p>From a cardboard board full of buttons to a painted ball you can throw a party around. Tap a photo to see it bigger.</p>
+    </div>
+    <div class="gallery">
+        <figure class="shot"><button type="button" class="open" data-src="img/bench.jpg" aria-label="Open photo: First bench prototype: buttons pushed through cardboard and every part we had."><img src="img/bench.jpg" alt="First bench prototype: buttons pushed through cardboard and every part we had." loading="lazy"></button><figcaption><b>Bench</b>First bench prototype: buttons pushed through cardboard and every part we had.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/bench2.jpg" aria-label="Open photo: Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires."><img src="img/bench2.jpg" alt="Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires." loading="lazy"></button><figcaption><b>Bench</b>Second bench build: screen, keypad, LED matrix, speaker and motor on jumper wires.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-1.jpg" aria-label="Open photo: The ESP32 soldered onto a 7 x 9 cm perfboard: the core board."><img src="img/core-1.jpg" alt="The ESP32 soldered onto a 7 x 9 cm perfboard: the core board." loading="lazy"></button><figcaption><b>Core board</b>The ESP32 soldered onto a 7 x 9 cm perfboard: the core board.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/core-4.jpg" aria-label="Open photo: Everything plugged in for the first full test."><img src="img/core-4.jpg" alt="Everything plugged in for the first full test." loading="lazy"></button><figcaption><b>Core board</b>Everything plugged in for the first full test.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/shell-1.jpg" aria-label="Open photo: Fitting the core board inside the shell."><img src="img/shell-1.jpg" alt="Fitting the core board inside the shell." loading="lazy"></button><figcaption><b>Into the ball</b>Fitting the core board inside the shell.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/team.jpg" aria-label="Open photo: Threading the lights between the panels."><img src="img/team.jpg" alt="Threading the lights between the panels." loading="lazy"></button><figcaption><b>Into the ball</b>Threading the lights between the panels.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/shell-3.jpg" aria-label="Open photo: Lights on and the menu up."><img src="img/shell-3.jpg" alt="Lights on and the menu up." loading="lazy"></button><figcaption><b>Into the ball</b>Lights on and the menu up.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/paint.jpg" aria-label="Open photo: Matte black paint and lettered button caps."><img src="img/paint.jpg" alt="Matte black paint and lettered button caps." loading="lazy"></button><figcaption><b>The look</b>Matte black paint and lettered button caps.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/final-side.jpg" aria-label="Open photo: Hazard stripes on the side panels."><img src="img/final-side.jpg" alt="Hazard stripes on the side panels." loading="lazy"></button><figcaption><b>The look</b>Hazard stripes on the side panels.</figcaption></figure>
+        <figure class="shot"><button type="button" class="open" data-src="img/mask.jpg" aria-label="Open photo: Trailer test: the saboteur and the bomb."><img src="img/mask.jpg" alt="Trailer test: the saboteur and the bomb." loading="lazy"></button><figcaption><b>Trailer</b>Trailer test: the saboteur and the bomb.</figcaption></figure>
+    </div>
+  </div>
+</section>
+<dialog class="lightbox" id="lightbox" aria-label="Photo"><button type="button" class="close" id="lbclose" aria-label="Close">×</button><img id="lbimg" alt=""><p id="lbcap"></p></dialog>
+
+
+
 
 <div class="tape" aria-hidden="true"></div>
 
@@ -424,15 +390,7 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
   <div class="wrap">
     <div class="head">
       <div><div class="label">Dev log</div><h2>From cardboard to a bomb</h2></div>
-      <p>Two weeks of building, breaking and playtesting, newest first. Start with the video, then read the log.</p>
-    </div>
-    <div class="trailer devvid" data-video="devlog">
-      <span class="tc tl">● DEV LOG</span><span class="tc tr">VIDEO</span>
-      <div class="inner">
-        <div class="play" aria-hidden="true"></div>
-        <h3>Dev log video coming soon</h3>
-        <p>How we built the bomb, from cardboard to the ball.</p>
-      </div>
+      <p>Two weeks of building, breaking and playtesting, newest first.</p>
     </div>
     <div class="log">
       <div class="entries">
@@ -445,19 +403,7 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
         <article class="entry">
           <time datetime="2026-10-30">30 Oct</time>
           <h3>The saboteur gets a buzz</h3>
-          <p>Our hidden-role mode went through four versions in two days. The one that stuck: everyone does the same puzzle, and the saboteur adds one extra move. A buzz tells them it worked. Fake buzzes on half the turns keep everyone guessing.</p>
-          <span class="tag">Design</span>
-        </article>
-        <article class="entry">
-          <time datetime="2026-10-30">30 Oct</time>
-          <h3>Secret rule mode</h3>
-          <p>A 4 by 4 grid on the screen, a token and a rule only some of you know. Leave it on a red square, or next to a dotted one. The player who doesn't know has to copy the others and hope.</p>
-          <span class="tag">Design</span>
-        </article>
-        <article class="entry">
-          <time datetime="2026-10-28">28 Oct</time>
-          <h3>Bomber mode</h3>
-          <p>Our first hidden-role mode. Bombers mark crew members during their turns, then the alarm goes off and someone gets a panic round.</p>
+          <p>The saboteur rules went through several versions in two days. The one that stuck: everyone does the same puzzle, and the saboteur adds one extra move. A buzz tells them it worked. Fake buzzes on half the turns keep everyone guessing.</p>
           <span class="tag">Design</span>
         </article>
         <article class="entry">
@@ -473,15 +419,9 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
           <span class="tag">Playtest</span>
         </article>
         <article class="entry">
-          <time datetime="2026-10-25">25 Oct</time>
-          <h3>Difficulty and action puzzles</h3>
-          <p>Easy, Medium and Hard. Plus six action puzzles drawn on the tiny screen: Pong with a knob for each paddle, a car you steer by tilting the ball, balloons you pop by shouting.</p>
-          <span class="tag">Code</span>
-        </article>
-        <article class="entry">
           <time datetime="2026-10-24">24 Oct</time>
           <h3>First playtests</h3>
-          <p>Elimination rules, a coin-flip pass gamble that gets riskier every time, and a hand-over moment where the ball calls the next colour. Players started guarding the ball like it was real.</p>
+          <p>We played it in the lab and changed the rules after almost every game: who goes out, how passing works, and how fragile the bomb should be.</p>
           <span class="tag">Playtest</span>
         </article>
         <article class="entry blast">
@@ -551,7 +491,7 @@ footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
   document.getElementById('lbclose').addEventListener('click',function(){ lb.close(); });
   lb.addEventListener('click',function(e){ if(e.target===lb) lb.close(); });
 })();
-/* VIDEOS: paste a YouTube link or a file path (e.g. "videos/trailer.mp4") between the quotes. Leave empty to show the "coming soon" frame. */
+/* VIDEOS: paste a YouTube link or a file path (e.g. "videos/trailer.mp4") between the quotes. Leave empty and the slot shows a link instead. */
 var VIDEOS = {
   trailer: "https://www.youtube.com/watch?v=KT34hxqrFIs",
   devlog: ""
