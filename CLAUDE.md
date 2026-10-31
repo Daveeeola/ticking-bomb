@@ -219,3 +219,4 @@ Countdown length and puzzles to defuse (Solo), bonus time per solve, starting ti
 The live, editable versions of both docs are Claude Docs artifacts:
 - Working doc: https://claude.ai/code/artifact/8c65c04c-2bd5-4b40-bc18-978db05509d2
 - REPLAY doc: https://claude.ai/code/artifact/7e1a7c04-6e51-4ea1-8618-c74b8a072d17
+- 31 Oct, **website**: `site/` = static site for Vercel (index.html + img/ + videos/, vercel.json). Bomb-themed one-pager: hero bomb countdown, the bomb, trailer slot, Saboteur mode design (public name for the Terrorist mode), other modes, dev log with a video slot. Videos go in the `VIDEOS` object near the bottom of index.html (YouTube link or videos/*.mp4). Preview artifact: https://claude.ai/artifact/2pBxLTQURXdpr4JsPRXGcs. Demo space drawings (alt.ctrl.GDC form): Design canvas https://claude.ai/artifact/Eee4yJrFnuhzE2yKjxHaMM + colour and B&W PDFs in scratchpad gdcspace/pdf/.

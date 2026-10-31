@@ -1,0 +1,3 @@
+Drop trailer.mp4 and devlog.mp4 here if you are not using YouTube.
+Then set them in index.html near the bottom: trailer: "videos/trailer.mp4"
+Keep each file under 100 MB (Vercel limit); YouTube is better for big files.

@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Reset Protocol: a physical party game. Pass it. Solve it. Don't shake it.">
+<meta property="og:title" content="Reset Protocol"><meta property="og:description" content="A ball-shaped bomb ticks down in your hands. Pass it. Solve it. Don't shake it."><meta property="og:image" content="img/bench.jpg">
+<title>Reset Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one long scroll, cut into "sections of fuse". Hazard tape between chapters, an LED strip of 5 x 6 cells as the recurring motif. */
+:root{
+  --ink:#0C0C0E; --panel:#151519; --line:#2A2A31; --text:#EDEDE8; --dim:#9C9CA4;
+  --hazard:#FFC400; --oled:#7CC6FF; --red:#FF3B30;
+  --p-red:#FF3B30; --p-blue:#2F6BFF; --p-green:#22C55E; --p-yellow:#FFC400; --p-white:#E8E8E8; --p-magenta:#FF3BD4; --p-cyan:#22D3EE; --p-orange:#FF7A1A;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:max(16px,env(safe-area-inset-left,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ink)}
+a{color:var(--hazard)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--hazard);outline-offset:3px}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:.95;letter-spacing:.01em}
+p{margin:0}
+.label{font:700 12px/1.3 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--hazard)}
+.tape{height:14px;background:repeating-linear-gradient(-45deg,var(--hazard) 0 14px,var(--ink) 14px 28px)}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--ink) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
+.brand{font:900 22px/1 var(--display);letter-spacing:.04em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand i{width:14px;height:14px;border-radius:50%;background:var(--ink);box-shadow:inset 0 -4px 0 -1px var(--hazard),0 0 0 2px var(--text)}
+nav ul{list-style:none;display:flex;gap:18px;margin:0 0 0 auto;padding:0;flex-wrap:wrap}
+nav ul a{font:700 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+nav ul a:hover{color:var(--hazard)}
+
+/* hero */
+.hero{padding-block:56px 64px;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center}
+.hero h1{font-size:clamp(64px,11vw,148px);font-weight:900;text-transform:uppercase;line-height:.84}
+.hero h1 span{display:block;color:var(--hazard)}
+.rules{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.rules b{font:800 clamp(20px,2.4vw,28px)/1 var(--display);text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border:2px solid var(--text)}
+.rules b:last-child{background:var(--hazard);color:var(--ink);border-color:var(--hazard)}
+.hero .lede{margin-top:24px;max-width:56ch;font-size:18px;color:#D6D6D0}
+.meta{margin-top:22px;font:500 13px/1.6 var(--mono);color:var(--dim)}
+
+.bombbox{position:relative;display:grid;place-items:center}
+.bomb{width:min(100%,420px);aspect-ratio:1;max-width:100%}
+.clock{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);font:900 clamp(44px,6vw,72px)/1 var(--display);letter-spacing:.06em;color:var(--red);background:#000;padding:6px 18px 4px;border:2px solid var(--line);font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(255,59,48,.6)}
+.flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:50}
+.boom{position:absolute;inset:0;display:grid;place-items:center;font:900 clamp(80px,14vw,160px)/1 var(--display);color:var(--hazard);opacity:0;pointer-events:none;text-shadow:0 0 30px rgba(255,196,0,.5)}
+
+/* sections */
+section.chapter{padding-block:80px}
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:40px}
+.head h2{font-size:clamp(44px,6vw,80px);font-weight:900;text-transform:uppercase;margin-top:12px}
+.head p{color:#D0D0CA;max-width:56ch}
+
+/* led strip motif */
+.strip{display:flex;gap:10px;flex-wrap:wrap}
+.strip span{display:flex;gap:3px}
+.strip i{width:11px;height:11px;border-radius:2px;background:#222228}
+.strip i.on{box-shadow:0 0 8px currentColor;background:currentColor}
+
+/* the bomb */
+.bombgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px}
+.photo{border:1px solid var(--line);background:var(--panel)}
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo figcaption{font:500 12px/1.5 var(--mono);color:var(--dim);padding:10px 14px;border-top:1px solid var(--line)}
+figure{margin:0}
+.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}
+.specs div{padding:16px 4px 16px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.specs div:nth-child(odd){padding-right:18px}
+.specs b{font:800 26px/1 var(--display);text-transform:uppercase}
+.specs small{color:var(--dim);font-size:14px;line-height:1.45}
+
+/* trailer */
+.trailer{position:relative;aspect-ratio:16/9;max-width:100%;border:1px solid var(--line);background:
+  radial-gradient(circle at 50% 46%,rgba(255,196,0,.14),transparent 46%),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 4px),#08080A;display:grid;place-items:center;overflow:hidden}
+.trailer .inner{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;padding:24px}
+.play{width:92px;height:92px;border-radius:50%;border:3px solid var(--hazard);display:grid;place-items:center}
+.play::after{content:"";border-left:28px solid var(--hazard);border-top:17px solid transparent;border-bottom:17px solid transparent;margin-left:8px}
+.devvid{margin-bottom:56px}
+.trailer iframe,.trailer video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.trailer h3{font-size:clamp(28px,4vw,46px);text-transform:uppercase;font-weight:900}
+.trailer p{color:var(--dim);font:500 13px/1.6 var(--mono);max-width:52ch}
+.tc{position:absolute;font:700 12px var(--mono);color:var(--red);letter-spacing:.14em}
+.tc.tl{top:16px;left:18px}.tc.tr{top:16px;right:18px;color:var(--dim)}
+.beats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:20px}
+.beats div{background:var(--ink);padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.beats b{font:700 12px var(--mono);color:var(--hazard);letter-spacing:.12em}
+.beats span{font-size:15px;color:#D0D0CA;line-height:1.45}
+
+/* saboteur */
+.sab{background:var(--panel);border-block:1px solid var(--line)}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;counter-reset:step}
+.flow li{list-style:none;display:flex;flex-direction:column;gap:12px;min-width:0}
+.flow ol{padding:0;margin:0}
+.oled{background:#000;border:6px solid #1F1F25;border-radius:4px;box-shadow:0 0 0 1px #33333B}
+.oled img{width:100%;image-rendering:pixelated}
+.flow h3{font-size:26px;font-weight:800;text-transform:uppercase;display:flex;gap:10px;align-items:baseline}
+.flow h3 em{font:700 13px var(--mono);font-style:normal;color:var(--hazard)}
+.flow p{font-size:15px;color:#CFCFC9;line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:56px}
+.card{border:2px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:14px;background:var(--ink);min-width:0}
+.card.bad{border-color:var(--hazard)}
+.card .who{font:900 40px/1 var(--display);text-transform:uppercase}
+.card.bad .who{color:var(--hazard)}
+.card p{color:#D0D0CA}
+.card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.card li{font:500 14px/1.45 var(--mono);color:var(--text);padding-left:20px;position:relative}
+.card li::before{content:"";position:absolute;left:0;top:.5em;width:9px;height:9px;background:var(--hazard)}
+.card:not(.bad) li::before{background:var(--oled)}
+.puzzles{margin-top:56px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px;align-items:start}
+.puzzles h3{font-size:44px;font-weight:900;text-transform:uppercase}
+.puzzles .note{color:var(--dim);margin-top:12px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font:700 13px/1 var(--mono);letter-spacing:.06em;padding:10px 12px;border:1px solid var(--line);background:var(--ink);text-transform:uppercase}
+.chips span i{font-style:normal;color:var(--hazard);margin-right:8px}
+.win{margin-top:56px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.win div{background:var(--panel);padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.win b{font:800 22px/1.05 var(--display);text-transform:uppercase}
+.win span{color:#CFCFC9;font-size:15px;line-height:1.5}
+
+/* modes */
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.mode{border-top:4px solid var(--text);padding-top:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.mode.hl{border-color:var(--hazard)}
+.mode b{font:900 32px/1 var(--display);text-transform:uppercase}
+.mode small{font:700 12px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.mode p{font-size:15px;color:#CFCFC9;line-height:1.5}
+
+/* devlog */
+.log{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start}
+.entries{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.entry{position:relative;padding:0 0 34px 28px;display:flex;flex-direction:column;gap:8px}
+.entry::before{content:"";position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--hazard)}
+.entry.blast::before{background:var(--red);border-color:var(--red);box-shadow:0 0 10px var(--red)}
+.entry time{font:700 12px var(--mono);letter-spacing:.14em;color:var(--hazard);text-transform:uppercase}
+.entry h3{font-size:30px;font-weight:800;text-transform:uppercase}
+.entry p{color:#D0D0CA;max-width:64ch}
+.entry .tag{align-self:flex-start;font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:4px 8px}
+.side{position:sticky;top:90px;display:flex;flex-direction:column;gap:20px}
+
+footer{border-top:1px solid var(--line);padding-block:40px 56px}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:end}
+footer .big{font:900 clamp(40px,7vw,84px)/.9 var(--display);text-transform:uppercase}
+footer p{font:500 13px/1.7 var(--mono);color:var(--dim)}
+
+@media (max-width:900px){
+  .hero .wrap,.head,.bombgrid,.puzzles,.log,.cards{grid-template-columns:minmax(0,1fr)}
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .modes,.beats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .win{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .bombbox{order:-1}
+  .bomb{width:min(100%,320px)}
+}
+@media (max-width:520px){
+  .flow,.modes,.beats,.specs{grid-template-columns:minmax(0,1fr)}
+  nav ul{gap:12px;margin-left:0}
+  section.chapter{padding-block:56px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="#top"><i aria-hidden="true"></i>RESET PROTOCOL</a>
+    <ul>
+      <li><a href="#bomb">The bomb</a></li>
+      <li><a href="#trailer">Trailer</a></li>
+      <li><a href="#saboteur">Saboteur mode</a></li>
+      <li><a href="#devlog">Dev log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="label">A physical party game for 2 to 8 players</div>
+      <h1 style="margin-top:18px">Reset <span>Protocol</span></h1>
+      <div class="rules"><b>Pass it.</b><b>Solve it.</b><b>Don't shake it.</b></div>
+      <p class="lede">A ball-shaped bomb ticks down in your hands. Solve its puzzle with the keys, knobs, buttons and your voice, then get rid of it before the clock runs out. Shake it too hard and it goes off.</p>
+      <p class="meta">Made by David Olamide and Fardoush Hassan<br>REPLAY Master's in Game Design, Lusófona University, Lisbon</p>
+    </div>
+    <div class="bombbox">
+      <svg class="bomb" viewBox="0 0 400 400" role="img" aria-label="The Reset Protocol bomb: a matte black ball with a yellow band round the middle and a ring of coloured lights">
+        <defs>
+          <radialGradient id="shine" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="#3A3A42"/><stop offset=".55" stop-color="#141417"/><stop offset="1" stop-color="#050506"/></radialGradient>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset=".55" stop-color="#FFC400" stop-opacity=".18"/><stop offset="1" stop-color="#FFC400" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="200" cy="190" r="190" fill="url(#glow)"/>
+        <g id="leds"></g>
+        <circle cx="200" cy="190" r="132" fill="url(#shine)" stroke="#2A2A31" stroke-width="2"/>
+        <path d="M68 196 Q200 246 332 196 L332 176 Q200 226 68 176 Z" fill="#FFC400"/>
+        <rect x="160" y="112" width="80" height="44" rx="4" fill="#000" stroke="#33333B" stroke-width="3"/>
+        <text x="200" y="141" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#7CC6FF" id="oledtxt">BLUE</text>
+        <g fill="#0C0C0E" stroke="#3A3A42" stroke-width="2">
+          <circle cx="146" cy="262" r="14"/><circle cx="254" cy="262" r="14"/>
+        </g>
+        <g><circle cx="176" cy="292" r="7" fill="#FFC400"/><circle cx="194" cy="296" r="7" fill="#2F6BFF"/><circle cx="212" cy="296" r="7" fill="#FF3B30"/><circle cx="230" cy="292" r="7" fill="#22C55E"/></g>
+      </svg>
+      <div class="clock" id="clock" aria-hidden="true">00:15</div>
+      <div class="boom" id="boom" aria-hidden="true">BOOM</div>
+    </div>
+  </div>
+</header>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="bomb">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">The bomb</div><h2>Everything happens on the ball</h2></div>
+      <p>No laptop, no base station, no screen to look at. One ESP32 inside the ball runs the whole game: the puzzles, the clock, the lights, the sound and the buzz in your hands. Switch it on and play.</p>
+    </div>
+    <div class="bombgrid">
+      <figure class="photo">
+        <img src="img/bench.jpg" alt="The first bench prototype: arcade buttons pushed through cardboard, an ESP32, keypad, LED strip, speaker and vibration motors spread across a desk" width="1400" height="788" loading="lazy">
+        <figcaption>The first bench prototype, October 2026. Cardboard, a lot of jumper wires and every part we had.</figcaption>
+      </figure>
+      <div>
+        <div class="specs">
+          <div><b>4 keys</b><small>Number keys 1 to 4 for codes and answers</small></div>
+          <div><b>4 + X</b><small>Yellow, blue, red and green buttons, plus X to cancel</small></div>
+          <div><b>2 knobs</b><small>Turned and pressed, often both at once</small></div>
+          <div><b>Mic</b><small>Some puzzles want you to shout at it</small></div>
+          <div><b>Motion</b><small>Feels every bump. Shake it and it blows</small></div>
+          <div><b>OLED</b><small>Small screen for the puzzle and your secret role</small></div>
+          <div><b>40 LEDs</b><small>Five sections of light: timer, colours, the holder</small></div>
+          <div><b>Sound + buzz</b><small>8-bit sound and a motor you feel in your hands</small></div>
+        </div>
+        <div style="margin-top:24px" class="strip" aria-label="LED strip: five sections in the player colours" role="img">
+          <span style="color:var(--p-red)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-blue)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-green)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+          <span style="color:var(--p-yellow)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+          <span><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="trailer">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">Trailer</div><h2>Sixty seconds, one bomb</h2></div>
+      <p>An empty room, a table, the bomb and one mask. The trailer follows a group as one of them plants the bomb, then hides in plain sight among the people trying to defuse it.</p>
+    </div>
+    <div class="trailer" data-video="trailer" data-title="Trailer coming soon" data-len="01:00">
+      <span class="tc tl">● REC</span><span class="tc tr">00:00 / 01:00</span>
+      <div class="inner">
+        <div class="play" aria-hidden="true"></div>
+        <h3>Trailer coming soon</h3>
+        <p>It will play here once it's up.</p>
+      </div>
+    </div>
+    <div class="beats">
+      <div><b>00:00</b><span>Someone in a mask plants the bomb on the table, then takes the mask off and hides it.</span></div>
+      <div><b>00:15</b><span>The group finds the bomb. Panic. Hands on the keys and knobs, the clock running.</span></div>
+      <div><b>00:30</b><span>The time keeps getting cut, and nobody knows why. Someone starts watching the others.</span></div>
+      <div><b>00:45</b><span>The vote. Every finger points. The bomb decides who was right.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter sab" id="saboteur">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">Game design · Saboteur mode</div><h2>Same puzzle. Who's faking it?</h2></div>
+      <p>A hidden-role mode for 4 to 8 players. Everyone does the same short puzzle on the bomb, one after another, while the rest of the table watches. One of them is secretly working for the bomb, and has to slip an extra move into their turn without anyone noticing.</p>
+    </div>
+
+    <ol class="flow">
+      <li>
+        <figure class="oled"><img src="img/oled-intro.png" alt="Bomb screen: ROUND 1, TAP THE KEYS, START = secret check" width="384" height="212"></figure>
+        <h3><em>1</em>The puzzle</h3>
+        <p>The bomb picks one puzzle for the round and shows everyone how to do it.</p>
+      </li>
+      <li>
+        <figure class="oled"><img src="img/oled-civilian.png" alt="Bomb screen: YOU ARE A CIVILIAN. Do it right. Watch for anything extra." width="384" height="212"></figure>
+        <h3><em>2</em>The secret check</h3>
+        <p>The ball goes round. Each player looks alone. The saboteur also gets a secret extra move, like pressing one key twice.</p>
+      </li>
+      <li>
+        <figure class="oled"><img src="img/oled-typing.png" alt="Bomb screen: BLUE's turn, four boxes with the code 2 1 4 3, 14 seconds left" width="384" height="212"></figure>
+        <h3><em>3</em>Everyone goes</h3>
+        <p>15 seconds each. The saboteur's extra move only counts on their own turn. When it lands, the ball buzzes in their hands.</p>
+      </li>
+      <li>
+        <figure class="oled"><img src="img/oled-fuse.png" alt="Bomb screen: ROUND 1 DONE, WHO WAS IT? with a burning fuse" width="384" height="212"></figure>
+        <h3><em>4</em>Who was it?</h3>
+        <p>The bomb never says who slipped. Half of all turns get a fake buzz too, so a buzz alone proves nothing.</p>
+      </li>
+      <li>
+        <figure class="oled"><img src="img/oled-vote.png" alt="Bomb screen: SECRET VOTE, HAND THE BALL TO BLUE" width="384" height="212"></figure>
+        <h3><em>5</em>The secret vote</h3>
+        <p>Everyone votes in private on the ball. Most votes is out. A tie means one revote, then the bomb rolls a die.</p>
+      </li>
+    </ol>
+
+    <div class="cards">
+      <div class="card">
+        <div class="who">Civilians</div>
+        <p>Do the puzzle right and watch every hand on the ball.</p>
+        <ul>
+          <li>A slip costs nothing: press X and try again</li>
+          <li>Watch for the extra move, not the mistakes</li>
+          <li>Vote out the saboteur to win</li>
+        </ul>
+      </div>
+      <div class="card bad">
+        <div class="who">The saboteur</div>
+        <p>Do the puzzle right too, and sneak in the extra move.</p>
+        <ul>
+          <li>Skip it and you're caught: out, no vote</li>
+          <li>Each civilian voted out burns the fuse</li>
+          <li>Win when it's down to you and one other</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="puzzles">
+      <div>
+        <h3>11 puzzles, 3 secret moves each</h3>
+        <p class="note">Every puzzle has its own set of sabotages, so the thing to watch changes every round. Each puzzle comes up once before any repeats.</p>
+      </div>
+      <div class="chips">
+        <span><i>01</i>Shout on the blocks</span>
+        <span><i>02</i>Turn both knobs</span>
+        <span><i>03</i>Tap the keys</span>
+        <span><i>04</i>Copy the lights</span>
+        <span><i>05</i>Keep it level</span>
+        <span><i>06</i>Do the sum</span>
+        <span><i>07</i>Type the mix</span>
+        <span><i>08</i>Remember the lights</span>
+        <span><i>09</i>Turn to the mark</span>
+        <span><i>10</i>Stop in the box</span>
+        <span><i>11</i>Shake it 3 times</span>
+      </div>
+    </div>
+
+    <div class="win">
+      <div><b>Shake it, it blows</b><span>Too hard a jolt, or running out of time, and you're out on the spot, whoever you are.</span></div>
+      <div><b>Civilians win</b><span>When every saboteur has been voted out.</span></div>
+      <div><b>Saboteurs win</b><span>One against one, or with 5 or more players, when the saboteurs outnumber the civilians.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="modes">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">More ways to play</div><h2>Four modes on one ball</h2></div>
+      <p>Pick a mode, a player count and a difficulty on the bomb itself. The colour you wear on your headband is the colour the bomb calls.</p>
+    </div>
+    <div class="modes">
+      <div class="mode"><small>2 to 8 players</small><b>Classic</b><p>Solve your puzzle before the clock runs out, or gamble on a pass. Explode and you're out. Last one standing wins.</p></div>
+      <div class="mode"><small>4 to 8 players</small><b>Bomber</b><p>Secret bombers mark crew members for a panic round. Defuse enough puzzles before they take over.</p></div>
+      <div class="mode hl"><small>4 to 8 players</small><b>Saboteur</b><p>Same puzzle for everyone. One of you adds a secret move. Find them.</p></div>
+      <div class="mode"><small>4 to 8 players</small><b>Secret rule</b><p>Everyone knows where the token should land, except one. Move it, blend in, vote.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<section class="chapter" id="devlog">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="label">Dev log</div><h2>From cardboard to a bomb</h2></div>
+      <p>Two weeks of building, breaking and playtesting, newest first. Start with the video, then read the log.</p>
+    </div>
+    <div class="trailer devvid" data-video="devlog">
+      <span class="tc tl">● DEV LOG</span><span class="tc tr">VIDEO</span>
+      <div class="inner">
+        <div class="play" aria-hidden="true"></div>
+        <h3>Dev log video coming soon</h3>
+        <p>How we built the bomb, from cardboard to the ball.</p>
+      </div>
+    </div>
+    <div class="log">
+      <div class="entries">
+        <article class="entry">
+          <time datetime="2026-10-31">31 Oct</time>
+          <h3>Off to alt.ctrl.GDC</h3>
+          <p>We sent our application to alt.ctrl.GDC 2027, with a full set of drawings for the demo space: a pedestal for the bomb, a striped blast ring on the floor and eight coloured spots to stand on.</p>
+          <span class="tag">Event</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-30">30 Oct</time>
+          <h3>The saboteur gets a buzz</h3>
+          <p>Our hidden-role mode went through four versions in two days. The one that stuck: everyone does the same puzzle, and the saboteur adds one extra move. A buzz tells them it worked. Fake buzzes on half the turns keep everyone guessing.</p>
+          <span class="tag">Design</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-30">30 Oct</time>
+          <h3>Secret rule mode</h3>
+          <p>A 4 by 4 grid on the screen, a token and a rule only some of you know. Leave it on a red square, or next to a dotted one. The player who doesn't know has to copy the others and hope.</p>
+          <span class="tag">Design</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-28">28 Oct</time>
+          <h3>Bomber mode</h3>
+          <p>Our first hidden-role mode. Bombers mark crew members during their turns, then the alarm goes off and someone gets a panic round.</p>
+          <span class="tag">Design</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-27">27 Oct</time>
+          <h3>The look</h3>
+          <p>Matte black all over, one yellow band round the middle, and the logo badge on top. The shell is a collapsible disc ball, so the panels can flex when it's passed.</p>
+          <span class="tag">Art</span>
+        </article>
+        <article class="entry blast">
+          <time datetime="2026-10-25">25 Oct</time>
+          <h3>It blew itself up</h3>
+          <p>With the ball closed, the motor's own 3-2-1 buzz shook the motion sensor hard enough to set the bomb off. We raised the threshold instead of hiding the motor, so the bomb can still blow up during the countdown.</p>
+          <span class="tag">Playtest</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-25">25 Oct</time>
+          <h3>Difficulty and action puzzles</h3>
+          <p>Easy, Medium and Hard. Plus six action puzzles drawn on the tiny screen: Pong with a knob for each paddle, a car you steer by tilting the ball, balloons you pop by shouting.</p>
+          <span class="tag">Code</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-24">24 Oct</time>
+          <h3>First playtests</h3>
+          <p>Elimination rules, a coin-flip pass gamble that gets riskier every time, and a hand-over moment where the ball calls the next colour. Players started guarding the ball like it was real.</p>
+          <span class="tag">Playtest</span>
+        </article>
+        <article class="entry blast">
+          <time datetime="2026-10-23">23 Oct</time>
+          <h3>First casualty</h3>
+          <p>The USB chip on our main board died. A short somewhere on the perfboard. The spare board stepped in while we hunted for it.</p>
+          <span class="tag">Hardware</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-21">21 Oct</time>
+          <h3>One board to rule them all</h3>
+          <p>Everything moved from the breadboard mess onto one soldered core board that fits inside the ball, with a plug for every part.</p>
+          <span class="tag">Hardware</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-20">20 Oct</time>
+          <h3>It speaks</h3>
+          <p>8-bit sound made by the ESP32 itself, no sound files. It took an evening to work out why the board went dead: a software update, not our code.</p>
+          <span class="tag">Code</span>
+        </article>
+        <article class="entry">
+          <time datetime="2026-10-14">14 to 16 Oct</time>
+          <h3>A ball that ticks</h3>
+          <p>The first idea: a bomb you pass around a party, solving quick puzzles on it. Notebook sketches, a parts list from the lab and one blinking blue LED.</p>
+          <span class="tag">Start</span>
+        </article>
+      </div>
+      <aside class="side">
+        <figure class="photo">
+          <img src="img/sketch.jpg" alt="Notebook page sketching the game flow: setup, mode select, countdown, colour selected, solve or pass, explode" width="1000" height="563" loading="lazy">
+          <figcaption>Day one: the flow in a notebook. The impostor mode is already in the margin.</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="img/closeup.jpg" alt="Close-up of the bench prototype wiring" width="1000" height="563" loading="lazy">
+          <figcaption>Bench wiring, before the core board.</figcaption>
+        </figure>
+        <figure class="oled"><img src="img/oled-dials.png" alt="Bomb screen: TURN BOTH KNOBS, two dials with progress bars" width="384" height="212"></figure>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="big">Don't shake it.</div>
+      <p style="margin-top:14px">Reset Protocol · David Olamide and Fardoush Hassan<br>REPLAY Master's in Game Design, Lusófona University, Lisbon</p>
+    </div>
+    <div class="strip" aria-hidden="true">
+      <span style="color:var(--p-red)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+      <span style="color:var(--p-blue)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+      <span style="color:var(--p-green)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+      <span style="color:var(--p-magenta)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+      <span style="color:var(--p-cyan)"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* VIDEOS: paste a YouTube link or a file path (e.g. "videos/trailer.mp4") between the quotes. Leave empty to show the "coming soon" frame. */
+var VIDEOS = {
+  trailer: "",
+  devlog: ""
+};
+(function(){
+  function ytId(u){ var m=String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/); return m?m[1]:null; }
+  document.querySelectorAll('[data-video]').forEach(function(box){
+    var src=(VIDEOS[box.getAttribute('data-video')]||'').trim(); if(!src) return;
+    var id=ytId(src), el;
+    if(id){ el=document.createElement('iframe'); el.src='https://www.youtube-nocookie.com/embed/'+id+'?rel=0';
+      el.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; el.allowFullscreen=true; el.title=box.getAttribute('data-video')+' video'; }
+    else { el=document.createElement('video'); el.src=src; el.controls=true; el.preload='metadata'; el.playsInline=true; }
+    box.innerHTML=''; box.appendChild(el);
+  });
+})();
+(function(){
+  var cols=['#FF3B30','#2F6BFF','#22C55E','#FFC400','#E8E8E8','#FF3BD4','#22D3EE','#FF7A1A'];
+  var names=['RED','BLUE','GREEN','YELLOW','WHITE','MAGENTA','CYAN','ORANGE'];
+  var g=document.getElementById('leds'), ns='http://www.w3.org/2000/svg', leds=[];
+  for(var i=0;i<30;i++){
+    var a=(i/30)*Math.PI*2-Math.PI/2, c=document.createElementNS(ns,'circle');
+    c.setAttribute('cx',(200+160*Math.cos(a)).toFixed(1)); c.setAttribute('cy',(190+160*Math.sin(a)).toFixed(1));
+    c.setAttribute('r','5.5'); c.setAttribute('fill','#222228'); g.appendChild(c); leds.push(c);
+  }
+  var clock=document.getElementById('clock'), boom=document.getElementById('boom'), flash=document.getElementById('flash'), oled=document.getElementById('oledtxt');
+  var still=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var holder=1, t=15;
+  function paint(){
+    var lit=Math.ceil(t/15*30);
+    for(var i=0;i<30;i++) leds[i].setAttribute('fill', i<lit ? (t<=3 && t%1===0 ? '#FF3B30' : cols[holder]) : '#222228');
+    clock.textContent='00:'+(t<10?'0':'')+t; oled.textContent=names[holder];
+  }
+  if(still){ t=7; paint(); return; }
+  paint();
+  setInterval(function(){
+    t--;
+    if(t<0){
+      boom.style.transition='none'; boom.style.opacity='1'; flash.style.transition='none'; flash.style.opacity='.18';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        flash.style.transition='opacity .5s'; flash.style.opacity='0';
+        boom.style.transition='opacity 1.2s .4s'; boom.style.opacity='0';
+      });});
+      holder=(holder+3)%8; t=15;
+    }
+    paint();
+  },1000);
+})();
+</script>
+
+</body>
+</html>
