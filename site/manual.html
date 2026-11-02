@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset Protocol: Terrorist game manual</title>
+<meta name="description" content="How to play the Terrorist game on Reset Protocol, the ball-shaped bomb.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/*FONTFACES*/
+:root{--ink:#111214;--text:#2c3036;--muted:#6a7078;--rule:#e1e4e8;--hazard:#FFC400;--panel:#f6f6f3;--head:#141518}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--text);font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.tape{height:12px;background:repeating-linear-gradient(-45deg,var(--hazard) 0 12px,var(--ink) 12px 24px)}
+.wrap{max-width:860px;margin:0 auto;padding:36px max(20px,env(safe-area-inset-left,0px)) 56px}
+h1,h2{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;color:var(--ink);text-transform:uppercase;letter-spacing:.01em;margin:0;line-height:.95}
+h1{font-size:clamp(44px,8vw,72px);font-weight:900}
+h1 span{display:block;font-size:.5em;color:var(--muted);font-weight:800;margin-top:8px}
+h2{font-size:30px;font-weight:800;margin:40px 0 14px;display:flex;align-items:baseline;gap:12px;break-after:avoid}
+h2 b{display:inline-block;background:var(--hazard);color:var(--ink);font-size:20px;padding:2px 9px 0;transform:translateY(-3px)}
+h3{font-size:16px;color:var(--ink);margin:22px 0 6px;break-after:avoid}
+p{margin:0 0 10px;max-width:68ch}
+.lede{font-size:18px;color:#1f2226;margin:18px 0 0}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:24px 0 0}
+.facts div{border:2px solid var(--ink);padding:10px 12px}
+.facts small{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.facts b{font-family:"Barlow Condensed",Arial,sans-serif;font-size:26px;color:var(--ink)}
+table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:14px;line-height:1.45}
+th{background:var(--head);color:#fff;text-align:left;padding:9px 12px;font-weight:600;font-size:13px}
+td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:nth-child(even) td{background:var(--panel)}
+td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+tr{break-inside:avoid}
+.scroll{overflow-x:auto}
+ol.steps{list-style:none;padding:0;margin:14px 0;counter-reset:s;display:grid;gap:10px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:12px 14px;background:var(--panel);break-inside:avoid}
+ol.steps li::before{content:counter(s);font-family:"Barlow Condensed",Arial,sans-serif;font-weight:900;font-size:30px;line-height:1;background:var(--ink);color:var(--hazard);text-align:center;padding:6px 0 3px}
+ol.steps b{color:var(--ink)}
+ul{padding-left:20px;margin:6px 0 12px}
+li{margin:0 0 5px}
+.note{border-left:5px solid var(--hazard);background:#fffbea;padding:12px 16px;margin:14px 0;font-size:14px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:2px solid var(--ink);padding:14px 16px}
+.card.t{border-color:var(--hazard);background:#fffbea}
+.card h3{margin-top:0;font-family:"Barlow Condensed",Arial,sans-serif;font-size:24px;text-transform:uppercase}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.swatches span{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border:1px solid var(--rule);padding:4px 10px 4px 6px}
+.swatches i{width:14px;height:14px;border:1px solid #0002}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+a{color:#8a6a00}
+@media (max-width:640px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:1fr}td:first-child{white-space:normal}}
+@page{size:A4;margin:14mm 14mm 16mm}
+@media print{.wrap{padding:0;max-width:none}h2{margin-top:28px}.tape{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-size:13.5px}}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div class="wrap">
+
+<h1>Reset Protocol <span>The Terrorist game: how to play</span></h1>
+<p class="lede">One bomb. One puzzle each round. Everyone does it, one by one, while the table watches. One of you is secretly a terrorist who has to slip an extra move into their turn. Find them before they blow the whole thing.</p>
+<div class="facts">
+<div><small>Players</small><b>4 to 8</b></div>
+<div><small>Terrorists</small><b>1 to 3</b></div>
+<div><small>Each go</small><b>15 seconds</b></div>
+<div><small>Puzzles</small><b>11</b></div>
+</div>
+
+<h2><b>01</b>What you need</h2>
+<ul>
+<li>The bomb, switched on (rocker switch). It runs on its own power bank, so no cable is needed.</li>
+<li>4 to 8 players, each wearing a headband in their colour. The bomb uses the colours in this order:</li>
+</ul>
+<div class="swatches">
+<span><i style="background:#ff0000"></i>1 Red</span><span><i style="background:#0000ff"></i>2 Blue</span><span><i style="background:#00c800"></i>3 Green</span><span><i style="background:#ffb400"></i>4 Yellow</span><span><i style="background:#fff"></i>5 White</span><span><i style="background:#ff00ff"></i>6 Magenta</span><span><i style="background:#00ffff"></i>7 Cyan</span><span><i style="background:#ff3c00"></i>8 Orange</span>
+</div>
+<p>With 5 players, Red to White are in. Stand in a circle in that order if you can.</p>
+
+<h2><b>02</b>The controls</h2>
+<div class="scroll"><table>
+<tr><th>Control</th><th>What it does</th></tr>
+<tr><td>START</td><td>OK, go, and check your answer. Just tap it.</td></tr>
+<tr><td>X</td><td>Delete one key, or start a timed puzzle again. <b>Hold X for 2 seconds to go back to the menu</b> from anywhere.</td></tr>
+<tr><td>Keys 1 to 4</td><td>Number answers, and picking menu lines.</td></tr>
+<tr><td>Y B R G buttons</td><td>Colour answers: yellow, blue, red, green.</td></tr>
+<tr><td>Left and right knobs</td><td>Turn and press. Both also scroll the menus.</td></tr>
+<tr><td>Mic</td><td>Hears shouts for the shout puzzle.</td></tr>
+<tr><td>Motion sensor</td><td>Feels shakes and tilts. A hard shake explodes the bomb.</td></tr>
+</table></div>
+
+<h2><b>03</b>Setting up</h2>
+<ol class="steps">
+<li><div><b>Switch on.</b> The main menu appears. Press <b>3</b> for <b>Terrorist</b>.</div></li>
+<li><div><b>How many players?</b> Turn a knob or use keys 1 and 2, then START.</div></li>
+<li><div><b>How many terrorists?</b> 4 players always have 1. With 5 to 7 it's 1 or 2, and with 8 up to 3. START to begin.</div></li>
+</ol>
+
+<h2><b>04</b>A round</h2>
+<ol class="steps">
+<li><div><b>The puzzle.</b> The bomb names this round's puzzle and shows how to do it. Press a knob to watch the demo again, then START.</div></li>
+<li><div><b>The secret check.</b> The bomb calls each colour. Take the ball, tap START to see your role where nobody else can, tap START again to hide it, and pass it on.
+<br><b>Civilians</b> see: "Do it right. Watch for anything extra."
+<br><b>Terrorists</b> see their secret sabotage, and who the other terrorists are.</div></li>
+<li><div><b>Everyone goes.</b> The bomb calls players in a random order. Tap START when you're ready, then you have <b>15 seconds</b> to do the puzzle while everyone watches.</div></li>
+<li><div><b>The vote.</b> Once everyone has gone, the ball goes round again. Each player picks who they think the terrorist is, in private, and locks it with START.</div></li>
+<li><div><b>Out.</b> The player with the most votes is out, and the bomb shows whether they were a civilian or a terrorist. Then a new round starts with a new puzzle.</div></li>
+</ol>
+
+<h2><b>05</b>The puzzles</h2>
+<p>Everyone does the same puzzle in a round. Each one comes up once before any repeats.</p>
+<div class="scroll"><table>
+<tr><th>Puzzle</th><th>What you do</th></tr>
+<tr><td>Tap the keys</td><td>Type the 4-key code shown, then START.</td></tr>
+<tr><td>Type the mix</td><td>Type a mix of keys and colours, like 3 Y G 1, then START.</td></tr>
+<tr><td>Do the sum</td><td>The answer is always 1 to 4. Press it, then START.</td></tr>
+<tr><td>Copy the lights</td><td>Press the 4 colours the strip shows, in order, then START.</td></tr>
+<tr><td>Remember the lights</td><td>The strip plays 4 colours once, then hides them. Repeat them, then START.</td></tr>
+<tr><td>Turn both knobs</td><td>Turn both knobs clockwise only until both bars are full, then START.</td></tr>
+<tr><td>Turn to the mark</td><td>Turn the knob it names to the mark, either way, then START.</td></tr>
+<tr><td>Stop in the box</td><td>A bar sweeps back and forth. Press START while it's inside the box.</td></tr>
+<tr><td>Shout on the blocks</td><td>Shout each time the slider is on a block.</td></tr>
+<tr><td>Keep it level</td><td>Hold the bomb still and level for 4 seconds.</td></tr>
+<tr><td>Shake it 3 times</td><td>Three firm shakes. Too hard and it explodes.</td></tr>
+</table></div>
+
+<h3>Got it wrong?</h3>
+<p>Nothing is checked until you press START. If it's wrong, everyone hears the same "WRONG", your entry clears and you try again while your clock keeps running. Use X to delete one key, or to start a timed puzzle again. A slip costs you time, never your role.</p>
+
+<h2><b>06</b>Sabotage</h2>
+<div class="cols">
+<div class="card"><h3>Civilians</h3>
+<ul>
+<li>Do the puzzle right.</li>
+<li>Watch every hand on the ball. You're looking for an <b>extra</b> move, not a mistake.</li>
+<li>Vote out the terrorist.</li>
+</ul></div>
+<div class="card t"><h3>Terrorists</h3>
+<ul>
+<li>Do the puzzle right too.</li>
+<li>Also do your secret move, like <b>PRESS A KEY TWICE</b>, <b>TURN A KNOB</b> or <b>HOLD A COLOUR DOWN</b>, on your own go.</li>
+<li>When it lands, the bomb <b>buzzes</b> in your hands.</li>
+</ul></div>
+</div>
+<div class="note"><b>The buzz proves nothing.</b> Half of everyone's goes get a fake buzz, so feeling or seeing a buzz doesn't mean that player is a terrorist. Watch what their hands do instead.</div>
+<p>A terrorist who finishes their go without landing their sabotage is caught: they're revealed and out at the end of the round, with no vote.</p>
+
+<h2><b>07</b>Going out</h2>
+<ul>
+<li><b>BOOM.</b> If your 15 seconds run out, or you shake the bomb too hard on your go, it explodes and you're out on the spot, whoever you are. The round ends there, with no vote.</li>
+<li><b>The vote.</b> No skipping, and you can't vote for yourself. Most votes is out. Only one player goes out per round.</li>
+<li><b>A tie.</b> One revote between the tied players, and they don't vote. Still tied? The bomb rolls a die between them.</li>
+<li><b>The fuse.</b> Each civilian who goes out burns one box of the fuse on screen. It shows how close the terrorists are to winning.</li>
+</ul>
+
+<h2><b>08</b>Winning</h2>
+<div class="cols">
+<div class="card"><h3>Civilians win</h3><p>When the last terrorist is out.</p></div>
+<div class="card t"><h3>Terrorists win</h3><p>When it's 1 terrorist against 1 civilian, or, with 2 or more terrorists, when they outnumber the civilians (like 2 against 1).</p></div>
+</div>
+
+<h2><b>09</b>For the host</h2>
+<ul>
+<li><b>Back to the menu:</b> hold X for 2 seconds.</li>
+<li><b>Spectator screen:</b> from the menu, pick <b>Wi-Fi + update</b> with a knob. Join the <b>ResetProtocol</b> network on a phone, tablet or laptop (the password is on the bomb's screen) and open <b>192.168.4.1</b> to follow the game live.</li>
+<li><b>Handle with care, but don't baby it:</b> normal passing is safe. Only a real shake sets it off.</li>
+<li><b>Loud rooms:</b> the shout puzzle learns how noisy the room is, but very loud floors make it harder.</li>
+</ul>
+
+<footer>Reset Protocol · Fardoush Hassan &amp; David Olamide · REPLAY Master's in Game Design, Lusófona University · <a href="https://reset-protocol-tau.vercel.app">reset-protocol-tau.vercel.app</a></footer>
+</div>
+</body>
+</html>
